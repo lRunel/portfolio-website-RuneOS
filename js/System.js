@@ -13,7 +13,7 @@ const System = {
                     if (pct !== undefined) progress.style.width = pct + '%';
                 }, delay);
 
-                addLog('Booting RuneOS...', 300, 10);
+                addLog('Booting Rune-os...', 300, 10);
                 addLog('Loading kernel v1.0.0...', 900, 30);
 
                 // Load WASM kernel, then continue boot

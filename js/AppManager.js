@@ -206,15 +206,15 @@ const AppManager = {
 ( o.o )
  > ^ <
 
-RuneOS v1.0
+Rune-os v1.0
 
 Hi, I'm Shubham.
 
-RuneOS started as an experiment to learn operating systems.
+Rune-os started as an experiment to learn operating systems.
 It eventually became my portfolio.
 
 Type 'help' to begin.`;
-            if (!output.innerText.includes('RuneOS v1.0')) {
+            if (!output.innerText.includes('Rune-os v1.0')) {
                 const currentText = output.innerText;
                 output.innerText = intro + (currentText ? '\n\n' + currentText : '');
             }
@@ -335,7 +335,7 @@ Type 'help' to begin.`;
             <div class="projects-container">
                 <div class="project-card" onclick="window.open('projects/runeos/index.html', '_blank')">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                        <div class="project-title">RuneOS v1.0</div>
+                        <div class="project-title">Rune-os v1.0</div>
                     </div>
                     <div class="project-tags">
                         <span>C</span>
@@ -386,13 +386,15 @@ Type 'help' to begin.`;
                 <div class="project-card" onclick="window.open('projects/gem/index.html', '_blank')">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div class="project-title">GEM</div>
+                        <a href="https://github.com/lRunel/Gem" target="_blank" onclick="event.stopPropagation()" style="font-size:11px;color:#888;text-decoration:none;border:1px solid #333;padding:2px 8px;border-radius:4px;">GitHub ↗</a>
                     </div>
                     <div class="project-tags">
-                        <span>AI Agent</span>
+                        <span>Multi-Agent</span>
+                        <span>Blackboard Architecture</span>
                         <span>RAG</span>
-                        <span>Tool Use</span>
+                        <span>Voice I/O</span>
                     </div>
-                    <div class="project-desc">A RAG-grounded agent that searches the web, writes code, runs it on your machine, and speaks the result.</div>
+                    <div class="project-desc">A 6-agent AI assistant with Blackboard Architecture — voice control, computer vision, and autonomous tool execution. Custom dispatch loop built before agent frameworks existed.</div>
                 </div>
             </div>
         `;
@@ -435,7 +437,7 @@ Type 'help' to begin.`;
                 <div class="profile-section" style="margin-top:0">
                     <div class="profile-section-title">System</div>
                     <div class="profile-edu">
-                        <div class="school">RuneOS v1.0</div>
+                        <div class="school">Rune-os v1.0</div>
                         <div class="degree">Kernel: Monolithic (C → WebAssembly)</div>
                         <div class="degree">Architecture: WASM32</div>
                         <div class="degree">Scheduler: Round-Robin Cooperative</div>

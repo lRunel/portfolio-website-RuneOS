@@ -88,7 +88,7 @@ const Shell = {
     },
 
     helpText() {
-        return 'RuneOS v1.0 — available commands:\n' +
+        return 'Rune-os v1.0 — available commands:\n' +
                '  cd <path>          Change directory\n' +
                '  pwd                Print working directory\n' +
                '  ls [path]          List directory\n' +
@@ -108,7 +108,7 @@ const Shell = {
         const ready = window.AIProcess ? window.AIProcess.isReady() : false;
         const state = window.AIProcess ? window.AIProcess.getState() : 'OFFLINE';
         const pid = window.AIProcess ? window.AIProcess.getPid() : '-';
-        return '=^.^= Cache — RuneOS AI Daemon\n' +
+        return '=^.^= Cache — Rune-os AI Daemon\n' +
                '───────────────────────────────\n' +
                `  PID:    ${pid}\n` +
                `  State:  ${state}\n` +

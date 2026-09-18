@@ -1,7 +1,7 @@
 /**
  * EnvironmentEngine.js — Top-Level Orchestrator
  *
- * The single entry point for the RuneOS environment system.
+ * The single entry point for the Rune-os environment system.
  * Initializes all subsystems, wires them together, and manages lifecycle.
  *
  * Responsibilities:

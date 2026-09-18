@@ -1,5 +1,5 @@
 /**
- * AIProcess.js — RuneOS AI Daemon (PID 4)
+ * AIProcess.js — Rune-os AI Daemon (PID 4)
  * 
  * User-space process named "Cache" (the cat =^.^=).
  * Communicates with the C kernel through Shell syscalls.
@@ -19,7 +19,7 @@ const AIProcess = (() => {
     let _downloadProgress = { progress: 0, loaded: 0, total: 0 };
 
     const SYSTEM_PROMPT =
-        'You are Cache, a helpful AI cat daemon inside RuneOS built by Shubham. ' +
+        'You are Cache, a helpful AI cat daemon inside Rune-os built by Shubham. ' +
         'Answer questions clearly and concisely based on your knowledge base. ' +
         'Keep answers very short. You can meow occasionally.';
 
@@ -97,89 +97,45 @@ const AIProcess = (() => {
                 }
 
                 let response = "";
-                const lowerPrompt = prompt.toLowerCase();
-                const promptWords = lowerPrompt.match(/\b[a-z]{3,}\b/g) || [];
+                let matched = false;
                 
-                // Helper: Levenshtein distance for fuzzy matching typos
-                const levenshtein = (a, b) => {
-                    if (a.length === 0) return b.length;
-                    if (b.length === 0) return a.length;
-                    const matrix = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
-                    for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
-                    for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
-                    for (let i = 1; i <= a.length; i++) {
-                        for (let j = 1; j <= b.length; j++) {
-                            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-                            matrix[i][j] = Math.min(
-                                matrix[i - 1][j] + 1,
-                                matrix[i][j - 1] + 1,
-                                matrix[i - 1][j - 1] + cost
-                            );
-                        }
-                    }
-                    return matrix[a.length][b.length];
+                // Helper to reflect words
+                const reflect = (str) => {
+                    if (!str) return "";
+                    // clean up punctuation from the captured string
+                    str = str.replace(/[.?!]/g, '');
+                    const words = str.toLowerCase().split(/\s+/);
+                    const reflected = words.map(w => (window.ELIZA_REFLECTIONS && window.ELIZA_REFLECTIONS[w]) ? window.ELIZA_REFLECTIONS[w] : w);
+                    return reflected.join(' ');
                 };
-
-                let bestMatch = null;
-                let maxScore = 0;
-
-                if (window.QA_DATABASE && promptWords.length > 0) {
-                    for (const item of QA_DATABASE) {
-                        let score = 0;
-                        for (const kw of item.keywords) {
-                            for (const pw of promptWords) {
-                                if (pw === kw) {
-                                    score += 3; // Exact match
-                                } else if (kw.includes(pw) || pw.includes(kw)) {
-                                    score += 1.5; // Stem/substring match
-                                } else if (pw.length > 4 && kw.length > 4 && levenshtein(pw, kw) <= 2) {
-                                    score += 1; // Fuzzy typo match
-                                }
+                
+                const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
+                
+                // 1. Try ELIZA rules
+                if (window.ELIZA_RULES) {
+                    for (const rule of ELIZA_RULES) {
+                        const match = prompt.match(rule.pattern);
+                        if (match) {
+                            matched = true;
+                            let template = random(rule.responses);
+                            if (match[1]) {
+                                const reflectedStr = reflect(match[1]);
+                                template = template.replace('{0}', reflectedStr);
                             }
-                        }
-                        
-                        score += item.answer.length * 0.001; // tie-breaker for longer, richer context
-                        if (score > maxScore && score > 2.5) { // Threshold to prevent garbage matches
-                            maxScore = score;
-                            bestMatch = item;
+                            response = template;
+                            break;
                         }
                     }
                 }
-
-                // Psychology Wrappers
-                const ackWrappers = [
-                    "That's an interesting question.",
-                    "Ah, let me think about that.",
-                    "Good question.",
-                    "Here's what I found in my knowledge base:",
-                    "Right, concerning that topic:"
-                ];
                 
-                const engageWrappers = [
-                    "Does that make sense?",
-                    "Let me know if you need more details.",
-                    "I hope that clarifies it!",
-                    "Is there anything else you want to know?"
-                ];
-
-                const fallbackWrappers = [
-                    "I'm sorry, I couldn't find specific details on that in the documentation.",
-                    "Hmm, that doesn't seem to match my current knowledge base.",
-                    "I don't have an exact answer for that right now."
-                ];
-                
-                const fallbackSuggestions = " But I am quite knowledgeable about RuneOS, the Distributed Deep Learning framework, and the Arecanut UAV project. Could I help you with one of those?";
-
-                const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
-                
-                // Intent recognition
-                if (lowerPrompt.match(/\b(hello|hi|hey|greetings)\b/)) {
-                    response = "Hello there! I'm Cache, the RuneOS daemon. How can I help you today?";
-                } else if (lowerPrompt.match(/\b(thanks|thank you|cool|awesome)\b/)) {
-                    response = "You're welcome! Let me know if there's anything else.";
-                } else if (bestMatch) {
-                    response = `${random(ackWrappers)} ${bestMatch.answer} ${random(engageWrappers)}`;
-                } else {
+                // 2. Fallback if no match
+                if (!matched) {
+                    const fallbackWrappers = [
+                        "I'm sorry, I couldn't find specific details on that.",
+                        "Hmm, that doesn't seem to match my current knowledge base.",
+                        "I don't have an exact answer for that right now."
+                    ];
+                    const fallbackSuggestions = " But I can tell you about Rune-os, Shubham, or projects like the DL Framework and Arecanut disease detection. What would you like to know?";
                     response = `${random(fallbackWrappers)}${fallbackSuggestions}`;
                 }
 
@@ -198,7 +154,7 @@ const AIProcess = (() => {
                         _emit('done', {});
                         resolve(response);
                     }
-                }, 50); // 50ms per word simulates fast typing
+                }, 30); // 30ms per word simulates fast typing
             });
         },
 
