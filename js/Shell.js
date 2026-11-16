@@ -71,8 +71,7 @@ const Shell = {
                 }
                 const prompt = val.replace(/^cache\s*/, '').replace(/^["']|["']$/g, '');
                 if (!prompt) {
-                    const state = window.AIProcess.getState();
-                    return { status: 0, data: `=^.^= Cache the Cat — AI Daemon (PID ${window.AIProcess.getPid()})\nState: ${state}\nUsage: cache <your question or message>` };
+                    return { status: 0, data: `=^.^= Cache — scripted Q&A (PID ${window.AIProcess.getPid()})\nUsage: cache <question>` };
                 }
                 return { status: 0, data: 'AI_QUERY', _prompt: prompt };
             }
@@ -99,25 +98,17 @@ const Shell = {
                '  ps                 List processes\n' +
                '  clear              Clear terminal\n' +
                '  reboot             Reload page\n' +
-               '\n  AI Commands:\n' +
-               '  cache <message>    Ask or chat with Cache the AI cat\n' +
-               '  help ai            AI-specific help\n';
+               '\n  Help:\n' +
+               '  cache <question>   Ask Cache (scripted Q&A)\n' +
+               '  help ai            How Cache works\n';
     },
 
     helpAIText() {
-        const ready = window.AIProcess ? window.AIProcess.isReady() : false;
-        const state = window.AIProcess ? window.AIProcess.getState() : 'OFFLINE';
         const pid = window.AIProcess ? window.AIProcess.getPid() : '-';
-        return '=^.^= Cache — Rune-os AI Daemon\n' +
-               '───────────────────────────────\n' +
-               `  PID:    ${pid}\n` +
-               `  State:  ${state}\n` +
-               `  Engine: Local knowledge base (120K+ Q&A pairs)\n` +
-               `  Ready:  ${ready ? 'yes' : 'no'}\n` +
-               '\n  Commands:\n' +
-               '  cache <message>    Ask or chat with Cache\n' +
-               '\n  Cache runs entirely in your browser.\n' +
-               '  No data leaves this machine.\n';
+        return '=^.^= Cache — Rune-os help daemon (PID ' + pid + ')\n' +
+               '  Scripted Q&A: your question is matched against a short list of\n' +
+               '  hand-written answers about Shubham\'s work. No language model.\n' +
+               '\n  Usage: cache <question>   e.g. cache what are his skills?\n';
     }
 };
 

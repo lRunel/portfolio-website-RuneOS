@@ -3,79 +3,31 @@ const System = {
             zIndex: 100,
 
             boot: () => {
-                const log = document.getElementById('boot-log');
-                const progress = document.getElementById('boot-progress');
+                const env = document.getElementById('environment');
+                if (env) env.style.visibility = 'visible';
 
-                const addLog = (text, delay, pct) => setTimeout(() => {
-                    const line = document.createElement('span');
-                    line.textContent = text;
-                    log.appendChild(line);
-                    if (pct !== undefined) progress.style.width = pct + '%';
-                }, delay);
+                const onDesktopReady = () => {
+                    System.booted = true;
+                    System.startLoops();
+                    if (window.AIProcess) AIProcess.boot();
+                    // Shareable deep link, e.g. ?open=projects
+                    const requested = new URLSearchParams(location.search).get('open');
+                    const linkable = ['overview', 'projects', 'resume', 'terminal', 'mail'];
+                    if (linkable.includes(requested)) {
+                        AppManager.launch(requested);
+                    } else if (window.innerWidth > 768 && !AppManager.instances['overview']) {
+                        // Desktop visitors land on the overview; mobile shows its own summary card.
+                        AppManager.launch('overview');
+                    }
+                };
 
-                addLog('Booting Rune-os...', 300, 10);
-                addLog('Loading kernel v1.0.0...', 900, 30);
-
-                // Load WASM kernel, then continue boot
                 KernelModule().then(mod => {
                     _wasmModule = mod;
-                    const initFn = mod.cwrap('wasm_kernel_init', null, []);
                     Shell.init(mod);
-                    initFn();
-
-                    addLog('Mounting /home filesystem...', 200, 60);
-                    addLog('Starting UI services...', 700, 85);
-                    addLog('Ready.', 1200, 100);
-
-                    setTimeout(() => {
-                        document.getElementById('boot-screen').style.opacity = 0;
-                        setTimeout(() => {
-                            document.getElementById('boot-screen').style.display = 'none';
-                            const env = document.getElementById('environment');
-                            if (env) env.style.visibility = 'visible';
-                            System.booted = true;
-                            System.startLoops();
-                            setTimeout(() => AppManager.launch('terminal'), 500);
-
-                            /* Boot AI daemon after desktop is usable (idle time) */
-                            if (window.requestIdleCallback) {
-                                requestIdleCallback(() => {
-                                    if (window.AIProcess) AIProcess.boot();
-                                }, { timeout: 3000 });
-                            } else {
-                                setTimeout(() => {
-                                    if (window.AIProcess) AIProcess.boot();
-                                }, 2500);
-                            }
-                        }, 1000);
-                    }, 1500);
+                    mod.cwrap('wasm_kernel_init', null, [])();
                 }).catch(err => {
-                    addLog('[WARN] WASM load failed: ' + err, 400, 50);
-                    addLog('Falling back to JS kernel stub...', 800, 80);
-                    addLog('Ready.', 1200, 100);
-                    setTimeout(() => {
-                        document.getElementById('boot-screen').style.opacity = 0;
-                        setTimeout(() => {
-                            document.getElementById('boot-screen').style.display = 'none';
-                            const env = document.getElementById('environment');
-                            if (env) env.style.visibility = 'visible';
-                            System.booted = true;
-                            System.startLoops();
-                            setTimeout(() => AppManager.launch('terminal'), 500);
-
-                            /* Boot AI daemon after desktop is usable (idle time) */
-                            if (window.requestIdleCallback) {
-                                requestIdleCallback(() => {
-                                    if (window.AIProcess) AIProcess.boot();
-                                }, { timeout: 3000 });
-                            } else {
-                                setTimeout(() => {
-                                    if (window.AIProcess) AIProcess.boot();
-                                }, 2500);
-                            }
-                        }, 1000);
-                    }, 1500);
-                });
+                    console.warn('[WASM] kernel failed to load:', err);
+                }).finally(onDesktopReady);
             },
 
             startLoops: () => {
@@ -111,35 +63,30 @@ const System = {
                 setInterval(updateClocks, 1000);
 
                 // Kernel Poll — real WASM kernel state
+                const bootedAt = Date.now();
+                const widget = document.getElementById('sys-widget');
                 const updateWidget = () => {
-                    const out = Shell.read(1, '/kernel/state');
-                    const raw = out.data || 'kernel: ok';
-                    /* Parse kernel state for display */
-                    const lines = raw.split('\n').filter(l => l.trim());
-                    let display = '';
-                    for (const line of lines) {
-                        const [key, val] = line.split(':').map(s => s.trim());
-                        if (key && val !== undefined) {
-                            if (key === 'ai') {
-                                const aiState = window.AIProcess ? window.AIProcess.getState() : val;
-                                const aiStage = window.AIProcess ? window.AIProcess.getStage() : '';
-                                let statusText = aiState.toLowerCase();
-                                if (aiStage === 'downloading') {
-                                    const p = window.AIProcess.getProgress();
-                                    statusText = `downloading ${Math.round(p.progress)}%`;
-                                } else if (aiStage === 'ready') {
-                                    statusText = 'ready ✓';
-                                }
-                                display += `ai: ${statusText}\n`;
-                            } else {
-                                display += `${key}: ${val}\n`;
-                            }
-                        }
-                    }
-                    document.getElementById('sys-widget').innerText = display.trim();
+                    const raw = Shell.read(1, '/kernel/state').data || '';
+                    const state = {};
+                    raw.split('\n').forEach(line => {
+                        const i = line.indexOf(':');
+                        if (i > 0) state[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+                    });
+                    const secs = Math.floor((Date.now() - bootedAt) / 1000);
+                    const uptime = secs < 60 ? `${secs}s` : `${Math.floor(secs / 60)}m ${secs % 60}s`;
+                    const ok = raw !== '';
+                    widget.innerHTML = `
+                        <div class="sw-title"><span class="sw-dot${ok ? '' : ' off'}"></span>C kernel · WebAssembly</div>
+                        <div class="sw-row"><span>status</span><span>${ok ? 'running' : 'offline'}</span></div>
+                        <div class="sw-row"><span>processes</span><span>${state.processes || '–'}</span></div>
+                        <div class="sw-row"><span>uptime</span><span>${uptime}</span></div>
+                        <button class="sw-cta" type="button">Open terminal →</button>`;
                 };
+                widget.addEventListener('click', (e) => {
+                    if (e.target.closest('.sw-cta')) AppManager.launch('terminal');
+                });
                 updateWidget();
-                setInterval(updateWidget, 3000);
+                setInterval(updateWidget, 1000);
 
                 // Desktop UI Refresher connecting real-time to /home
                 let lastDesktopState = "";
@@ -155,7 +102,7 @@ const System = {
                         
                         let offset = 20;
                         for (const item of items) {
-                            if (item === 'resume.html' || item === 'projects') continue; // Hide raw html and dock apps
+                            if (item === 'resume.txt' || item === 'projects') continue; // already reachable from the dock
                             const isFolder = !item.includes('.');
                             const iconStr = isFolder ? 'folder' : 'insert_drive_file';
                             const colorClass = isFolder ? 'color-folder' : 'color-file';

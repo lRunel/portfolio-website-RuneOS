@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="GEM — A multi-agent AI assistant with Blackboard Architecture, voice control, computer vision, and autonomous tool execution. Built from scratch before agent frameworks existed.">
+<meta name="description" content="GEM — A multi-agent AI assistant with Blackboard Architecture, voice control, computer vision, and autonomous tool execution. Built without an agent framework.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
@@ -56,7 +56,8 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
 .arch-box {
   background: #111; border: 1px solid #2a2a2a; border-radius: 8px;
   padding: 20px; margin: 24px 0; font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; color: #aaa; white-space: pre; overflow-x: auto;
+  font-size: 11px; color: #aaa; white-space: pre; overflow-x: auto;
+  max-width: 100%; -webkit-overflow-scrolling: touch;
   line-height: 1.5;
 }
 
@@ -114,14 +115,69 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
   margin-top: 12px;
 }
 .github-link:hover { background: #2a2a2a; }
+
+.doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.doc-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #151515; border: 1px solid #282828; border-radius: 8px;
+  padding: 14px 18px; text-decoration: none; transition: all 0.2s;
+}
+.doc-item:hover { background: #1c1c1c; border-color: #3b3b3b; transform: translateY(-1px); }
+.doc-info { display: flex; align-items: center; gap: 12px; }
+.doc-icon { color: #22c55e; font-size: 20px; }
+.doc-name { font-size: 14px; font-weight: 500; color: #e8e8e8; }
+.doc-meta { font-size: 12px; color: #666; font-family: 'JetBrains Mono', monospace; }
+.doc-link-btn { font-size: 12px; color: #888; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
+/* Sticky Nav Bar */
+.project-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #222;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-nav-bar a {
+  color: #6bb5ff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.project-nav-bar a:hover {
+  color: #9dd0ff;
+  text-decoration: underline;
+}
+.project-nav-bar .nav-links {
+  display: flex;
+  gap: 16px;
+}
 </style>
+<link rel="stylesheet" href="../project.css">
 </head>
-<body>
+<body style="--accent:#4eca8b">
+<nav class="project-nav-bar">
+  <a href="../../index.html">← Back to Rune-os</a>
+  <div class="nav-links">
+    <a href="https://github.com/lRunel/Gem" target="_blank" rel="noopener">GitHub ↗</a>
+    <a href="../../assets/Shubham_Chowta_SWE_Backend.pdf" target="_blank">Resume PDF ↗</a>
+  </div>
+</nav>
 <div class="page">
 
   <!-- LAYER 1 — Above the fold -->
+  <div class="hero-figure"><div data-figure="relay"></div></div>
   <h1>GEM</h1>
-  <p class="claim">A multi-agent AI assistant with Blackboard Architecture — voice control, computer vision, web search, and autonomous tool execution. Designed and built from scratch before agent frameworks existed.</p>
+  <p class="claim">A multi-agent AI assistant with Blackboard Architecture — voice control, computer vision, web search, and autonomous tool execution. Built without an agent framework: the dispatch loop and inter-agent messaging are custom.</p>
 
   <div class="metric-row">
     <div class="metric-card">
@@ -129,8 +185,8 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
       <div class="metric-label">supervisor + 5 specialized sub-agents</div>
     </div>
     <div class="metric-card">
-      <div class="metric-value">15+ tools</div>
-      <div class="metric-label">vision, shell, code, web, memory, files</div>
+      <div class="metric-value">9 tools</div>
+      <div class="metric-label">web &amp; Wikipedia search, run code, system commands, YouTube, ask other LLMs</div>
     </div>
     <div class="metric-card">
       <div class="metric-value">11-model</div>
@@ -279,6 +335,80 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
 
   <hr class="section-divider">
 
+  <!-- LAYER 5 — Project Documentation & Architectural Guides -->
+  <h2>Project Documentation &amp; Architectural Guides</h2>
+  <p>System manuals, agent specifications, blackboard IPC protocols, and wake word training guides:</p>
+
+  <div class="doc-list">
+    <a href="docs/01_architecture_and_core.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">account_tree</span>
+        <div>
+          <div class="doc-name">Architecture &amp; Core Dispatch Loop Specification</div>
+          <div class="doc-meta">01_architecture_and_core.md · Core Loops, Supervisor &amp; Cascading Fallback</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/02_agents_and_services.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">groups</span>
+        <div>
+          <div class="doc-name">Agents &amp; Services Subsystem Reference</div>
+          <div class="doc-meta">02_agents_and_services.md · Vision, Voice, System, Web, Knowledge Agents</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/03_communications_and_ipc.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">sync_alt</span>
+        <div>
+          <div class="doc-name">Blackboard Communications &amp; Markdown IPC</div>
+          <div class="doc-meta">03_communications_and_ipc.md · Zero-Dependency Multi-Process Protocol</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/04_hardware_and_setup.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">memory</span>
+        <div>
+          <div class="doc-name">Hardware Configuration &amp; Setup Guide</div>
+          <div class="doc-meta">04_hardware_and_setup.md · Audio I/O, Cameras &amp; Systemd Services</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/custom_wakeword_guide.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">record_voice_over</span>
+        <div>
+          <div class="doc-name">Custom Wake Word Training &amp; Deployment Guide</div>
+          <div class="doc-meta">custom_wakeword_guide.md · openWakeWord ONNX Integration</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/HANDOFF.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">handshake</span>
+        <div>
+          <div class="doc-name">System Handoff &amp; Operational Manual</div>
+          <div class="doc-meta">HANDOFF.md · Key Rotation, Maintenance &amp; Troubleshooting</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+  </div>
+
+  <hr class="section-divider">
+
   <!-- BOTTOM — Known Limitations -->
   <div class="limitations">
     <h2>Known Limitations</h2>
@@ -292,5 +422,6 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
   </div>
 
 </div>
+<script type="module" src="../figures.js"></script>
 </body>
 </html>

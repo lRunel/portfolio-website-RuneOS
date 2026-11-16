@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shubham Chowta — Backend & Systems Engineer</title>
+    <meta name="description" content="Shubham Chowta — backend and systems engineer. This portfolio runs on a small C kernel compiled to WebAssembly. Projects in distributed ML, computer vision, cloud tooling and AI agents.">
+    <meta property="og:title" content="Shubham Chowta — Backend & Systems Engineer">
+    <meta property="og:description" content="Backend & systems engineer. A portfolio that runs on a C kernel compiled to WebAssembly — open the terminal and try it.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="assets/favicon.jpg" type="image/jpeg">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet">
+    <script src="wasm/kernel.js?v=2"></script>
+    <link rel="stylesheet" href="css/index.css">
+
+</head>
+
+<body>
+    <h1 class="sr-only">Shubham Chowta — Backend & Systems Engineer</h1>
+    <!-- DESKTOP ENVIRONMENT -->
+    <div id="desktop-env">
+        <!-- Environment Engine (CSS layer system) -->
+        <div id="environment"></div>
+
+        <!-- Desktop Clock Widget -->
+        <div id="desktop-clock">
+            <div id="clock-time">00:00</div>
+            <div id="clock-date">Loading...</div>
+            <div id="clock-greeting"></div>
+            <div id="clock-identity">Shubham Chowta · Systems Engineer</div>
+        </div>
+
+        <!-- System Widget -->
+        <div id="sys-widget">Initializing...</div>
+
+        <!-- Workspace -->
+        <div id="workspace">
+            <!-- Windows spawn here -->
+        </div>
+
+        <!-- Dock -->
+        <div id="dock-container">
+            <nav id="dock">
+                <button class="dock-item" tabindex="0" id="dock-terminal" data-tooltip="Terminal">
+                    <div class="app-icon icon-term">
+                        <span class="material-symbols-rounded">terminal</span>
+                    </div>
+                    <div class="dock-sub-dot"></div>
+                </button>
+                <button class="dock-item" tabindex="0" id="dock-projects" data-tooltip="Projects">
+                    <div class="app-icon icon-files">
+                        <span class="material-symbols-rounded">folder</span>
+                    </div>
+                    <div class="dock-sub-dot"></div>
+                </button>
+                <button class="dock-item" tabindex="0" id="dock-resume" data-tooltip="Resume">
+                    <div class="app-icon icon-profile">
+                        <span class="material-symbols-rounded">badge</span>
+                    </div>
+                    <div class="dock-sub-dot"></div>
+                </button>
+                <button class="dock-item" tabindex="0" id="dock-settings" data-tooltip="Settings">
+                    <div class="app-icon icon-settings">
+                        <span class="material-symbols-rounded">settings</span>
+                    </div>
+                    <div class="dock-sub-dot"></div>
+                </button>
+                <button class="dock-item" tabindex="0" id="dock-mail" data-tooltip="Contact">
+                    <div class="app-icon icon-mail">
+                        <span class="material-symbols-rounded">mail</span>
+                    </div>
+                    <div class="dock-sub-dot"></div>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- MOBILE ENVIRONMENT -->
+    <div id="mobile-env">
+
+        <div class="mobile-status-bar">
+            <span id="mobile-clock">12:00</span>
+            <div class="mobile-status-right">
+                <span class="material-symbols-rounded" style="font-size:16px">signal_cellular_alt</span>
+                <span class="material-symbols-rounded" style="font-size:16px">wifi</span>
+                <span class="material-symbols-rounded" style="font-size:16px">battery_full</span>
+            </div>
+        </div>
+
+        <!-- Mobile Recruiter Quick Action Card -->
+        <div class="mobile-recruiter-card" id="mobile-recruiter-card">
+            <div class="m-recruiter-profile">
+                <div class="m-avatar">SC</div>
+                <div class="m-meta">
+                    <div class="m-name">Shubham R Chowta</div>
+                    <div class="m-role">Backend & Systems Engineer · B.Tech CSE (AI & ML), 2027</div>
+                </div>
+            </div>
+            <div class="m-quick-actions">
+                <a href="assets/Shubham_Chowta_SWE_Backend.pdf" download="Shubham_Chowta_SWE_Backend.pdf" class="m-action-btn primary" aria-label="Download Resume PDF">
+                    <span class="material-symbols-rounded">download</span>
+                    <span>Resume PDF</span>
+                </a>
+                <button class="m-action-btn" id="m-btn-projects" onclick="AppManager.launch('projects')" aria-label="Browse Projects">
+                    <span class="material-symbols-rounded">folder_open</span>
+                    <span>Projects</span>
+                </button>
+                <button class="m-action-btn" id="m-btn-contact" onclick="AppManager.launch('mail')" aria-label="Contact">
+                    <span class="material-symbols-rounded">mail</span>
+                    <span>Contact</span>
+                </button>
+                <a href="https://www.linkedin.com/in/shubham-chowta/" target="_blank" rel="noopener" class="m-action-btn icon-only" aria-label="LinkedIn">
+                    <span class="material-symbols-rounded">link</span>
+                </a>
+                <a href="https://github.com/lRunel" target="_blank" rel="noopener" class="m-action-btn icon-only" aria-label="GitHub">
+                    <span class="material-symbols-rounded">code</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="app-grid">
+            <div class="mobile-app" id="mobile-terminal">
+                <div class="app-icon icon-term"><span class="material-symbols-rounded">terminal</span></div>
+                <span>Terminal</span>
+            </div>
+            <div class="mobile-app" id="mobile-projects">
+                <div class="app-icon icon-files"><span class="material-symbols-rounded">folder_open</span></div>
+                <span>Projects</span>
+            </div>
+            <div class="mobile-app" id="mobile-resume">
+                <div class="app-icon icon-profile"><span class="material-symbols-rounded">badge</span></div>
+                <span>Resume</span>
+            </div>
+            <div class="mobile-app" id="mobile-settings">
+                <div class="app-icon icon-settings"><span class="material-symbols-rounded">settings</span></div>
+                <span>Settings</span>
+            </div>
+            <div class="mobile-app" id="mobile-mail">
+                <div class="app-icon icon-mail"><span class="material-symbols-rounded">mail</span></div>
+                <span>Contact</span>
+            </div>
+        </div>
+        <div class="mobile-home-indicator"></div>
+        <!-- Mobile Windows Container -->
+    </div>
+
+    <script src="js/Shell.js"></script>
+    <script src="js/System.js"></script>
+    <script src="js/WindowManager.js"></script>
+    <script src="js/AppManager.js"></script>
+    <script src="js/qa_database.js"></script>
+    <script src="js/AIProcess.js"></script>
+    <script type="module" src="js/environment/EnvironmentEngine.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

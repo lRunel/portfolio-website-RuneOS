@@ -1,0 +1,223 @@
+<!-- FILE: projects/linuxflow/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="LinuxFlow-E2B — a coding harness that helps a small model write C, using code-graph retrieval and rule checks before compiling.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+<title>LinuxFlow-E2B — Graph-Guided C Coding Harness</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0d0d0d;
+  color: #e8e8e8;
+  line-height: 1.65;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: rgba(255,255,255,0.1); color: #fff; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+
+.page { max-width: 760px; margin: 0 auto; padding: 32px 24px; }
+h1 { font-size: 32px; font-weight: 500; color: #e8e8e8; margin-bottom: 8px; }
+h2 { font-size: 18px; font-weight: 500; color: #e8e8e8; margin-bottom: 16px; margin-top: 48px; }
+h3 { font-size: 15px; font-weight: 500; color: #e8e8e8; margin-bottom: 10px; margin-top: 24px; }
+p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
+.claim { font-size: 15px; color: #888888; line-height: 1.6; margin-bottom: 20px; }
+
+.metric-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.metric-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px;
+  padding: 16px; flex: 1; min-width: 150px;
+}
+.metric-value { font-family: 'JetBrains Mono', monospace; font-size: 24px; color: #e8e8e8; }
+.metric-label { font-size: 12px; color: #666666; margin-top: 4px; }
+
+.badge-row { margin-bottom: 24px; }
+.badge {
+  display: inline-block; background: #1e1e1e; border: 1px solid #333;
+  border-radius: 4px; padding: 4px 10px; font-size: 12px;
+  color: #888; margin-right: 6px; margin-bottom: 6px;
+  text-decoration: none;
+}
+.badge-flagship {
+  background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399; font-weight: 500;
+}
+
+.callout {
+  background: #141414; border-left: 3px solid #10b981;
+  border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;
+}
+.callout p { color: #888888; margin-bottom: 0; }
+.callout p + p { margin-top: 12px; }
+
+.arch-box {
+  background: #111; border: 1px solid #2a2a2a; border-radius: 8px;
+  padding: 20px; margin: 24px 0; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: #aaa; white-space: pre; overflow-x: auto;
+  max-width: 100%; -webkit-overflow-scrolling: touch;
+  line-height: 1.5;
+}
+
+.grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 20px 0; }
+.item-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 16px;
+}
+.item-card .card-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #34d399; font-weight: 600;
+  margin-bottom: 4px;
+}
+.item-card .card-title {
+  font-size: 14px; color: #e8e8e8; font-weight: 500;
+  margin-bottom: 6px;
+}
+.item-card .card-body { font-size: 13px; color: #777; line-height: 1.5; }
+
+/* Sticky Nav Bar */
+.project-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #222;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-nav-bar a {
+  color: #6bb5ff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.project-nav-bar a:hover {
+  color: #9dd0ff;
+  text-decoration: underline;
+}
+.project-nav-bar .nav-links {
+  display: flex;
+  gap: 16px;
+}
+</style>
+<link rel="stylesheet" href="../project.css">
+</head>
+<body style="--accent:#8888a0">
+<nav class="project-nav-bar">
+  <a href="../../index.html">← Back to Rune-os</a>
+  <div class="nav-links">
+    <a href="../../assets/Shubham_Chowta_SWE_Backend.pdf" target="_blank">Resume PDF ↗</a>
+  </div>
+</nav>
+<div class="page">
+  <div class="badge-row">
+    <span class="badge">Experimental</span>
+    <span class="badge">Systems Engineering</span>
+    <span class="badge">LLM Tooling</span>
+    <span class="badge">C</span>
+  </div>
+
+  <div class="hero-figure"><div data-figure="format"></div></div>
+  <h1>LinuxFlow-E2B</h1>
+  <p class="claim">A coding harness that helps a small model (Gemma 4 E2B) write C. It gives the model only the relevant slice of a code graph instead of whole files, and rejects generated code that breaks a few simple safety and style rules before it is compiled.</p>
+
+  <div class="metric-row">
+    <div class="metric-card">
+      <div class="metric-value">25/25</div>
+      <div class="metric-label">tasks passed on first try (self-written C benchmark)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">-62.3%</div>
+      <div class="metric-label">context tokens vs. plain-text code slices</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">1.01ms</div>
+      <div class="metric-label">to check a patch against the rules</div>
+    </div>
+  </div>
+
+  <h2>1. Problem: Small Models Write Unsafe C</h2>
+  <p>Autonomous LLM coding agents routinely generate syntactically plausible but catastrophic code when targeting systems languages like C and the Linux kernel. Common failure modes include unbounded cyclomatic branching, stack-allocated excess local variables, missing allocation checks (`kmalloc`), dangerous string operations (`strcpy`), and deep control indentation.</p>
+  <p>Traditional sandboxes rely solely on trial-and-error compiler execution, wasting expensive context windows and allowing memory bugs to slip past unit tests.</p>
+
+  <h2>2. Approach: Code Property Graph Retrieval</h2>
+  <p>LinuxFlow-E2B parses the codebase into an explicit multi-layer semantic graph using tree-sitter-c and SQLite storage, enabling sub-token ego-slice retrieval instead of dumping entire source files into context.</p>
+
+  <div class="arch-box">
++--------------------------------------------------------------+
+|                    LinuxFlow-E2B Architecture                |
+|                                                              |
+|   Prompt / Task -> [Ego-Slice PageRank] -> Gemma 4 E2B       |
+|                            |                       |         |
+|                            v                       v         |
+|               [6-Layer Code Property Graph]   [Generated C]  |
+|               - AST + Struct Hierarchy             |         |
+|               - Control Flow Graph (CFG)           v         |
+|               - Pointer & Data Flow (DFG)     [Cedar Gate]   |
+|               - Interprocedural Call Graph         |         |
+|                            |                       v         |
+|               [TOON Digest Engine]            [GCC Compiler] |
+|               (-62.3% Token Compression)           |         |
+|                                                    v         |
+|                                            Verified Kernel   |
++--------------------------------------------------------------+
+  </div>
+
+  <h2>3. Rule Checks (Cedar Policies)</h2>
+  <p>Every generated patch is checked against five rules (written as Cedar policies) before it reaches GCC:</p>
+
+  <div class="grid-cards">
+    <div class="item-card">
+      <div class="card-num">RULE L1</div>
+      <div class="card-title">V_local &le; 5</div>
+      <div class="card-body">Caps stack variables per function to eliminate stack frame bloating and register spill.</div>
+    </div>
+    <div class="item-card">
+      <div class="card-num">RULE L2</div>
+      <div class="card-title">C_cyclomatic &le; 5</div>
+      <div class="card-body">Enforces guard clauses and early-return patterns, replacing complex nested if/else ladders.</div>
+    </div>
+    <div class="item-card">
+      <div class="card-num">RULE L3</div>
+      <div class="card-title">D_indent &le; 3</div>
+      <div class="card-body">Limits nesting depth so generated functions stay flat and easy to review.</div>
+    </div>
+    <div class="item-card">
+      <div class="card-num">RULE L4</div>
+      <div class="card-title">SLOC &le; 35</div>
+      <div class="card-body">Guarantees all functions fit within a 512-token Gemma 4 E2B sliding window.</div>
+    </div>
+    <div class="item-card">
+      <div class="card-num">RULE L5</div>
+      <div class="card-title">C Memory Safety</div>
+      <div class="card-body">Immediate allocation checks on kmalloc/malloc; ban on gets/strcpy/sprintf; forward-only goto cleanup.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>Rule check before compiling:</strong> If a patch violates any of L1–L5, it is rejected in about 1 ms with a message naming the broken rule, and that message goes back to the model before any time is spent compiling.</p>
+  </div>
+
+  <h2>4. Evaluation</h2>
+  <p>Evaluated on a small benchmark written for this project, so treat these as early results rather than a standard comparison:</p>
+  <ul style="margin-left: 20px; color: #888; font-size: 14.5px; line-height: 1.8;">
+    <li><strong>25 kernel-style C tasks</strong> (linked lists, a slab-style allocator, mutex use, device-tree parsing): all 25 compiled with GCC and passed the rule check on the first attempt.</li>
+    <li><strong>Token Optimization:</strong> 62.3% context reduction via Token-Oriented Object Notation (TOON) CPG digests compared to baseline markdown ego-slices.</li>
+  </ul>
+</div>
+<script type="module" src="../figures.js"></script>
+</body>
+</html>

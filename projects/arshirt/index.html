@@ -93,12 +93,66 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
 .limitations li::before { content: "—"; position: absolute; left: 0; color: #444; }
 
 .section-divider { border: none; border-top: 1px solid #1a1a1a; margin: 48px 0; }
+
+.doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.doc-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #151515; border: 1px solid #282828; border-radius: 8px;
+  padding: 14px 18px; text-decoration: none; transition: all 0.2s;
+}
+.doc-item:hover { background: #1c1c1c; border-color: #3b3b3b; transform: translateY(-1px); }
+.doc-info { display: flex; align-items: center; gap: 12px; }
+.doc-icon { color: #ec4899; font-size: 20px; }
+.doc-name { font-size: 14px; font-weight: 500; color: #e8e8e8; }
+.doc-meta { font-size: 12px; color: #666; font-family: 'JetBrains Mono', monospace; }
+.doc-link-btn { font-size: 12px; color: #888; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
+/* Sticky Nav Bar */
+.project-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #222;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-nav-bar a {
+  color: #6bb5ff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.project-nav-bar a:hover {
+  color: #9dd0ff;
+  text-decoration: underline;
+}
+.project-nav-bar .nav-links {
+  display: flex;
+  gap: 16px;
+}
 </style>
+<link rel="stylesheet" href="../project.css">
 </head>
-<body>
+<body style="--accent:#f06aa0">
+<nav class="project-nav-bar">
+  <a href="../../index.html">← Back to Rune-os</a>
+  <div class="nav-links">
+    <a href="../../assets/Shubham_Chowta_SWE_Backend.pdf" target="_blank">Resume PDF ↗</a>
+  </div>
+</nav>
 <div class="page">
 
   <!-- LAYER 1 — Above the fold -->
+  <div class="hero-figure"><div data-figure="rail"></div></div>
   <h1>ARWear</h1>
   <p class="claim">Real-time 3D garment try-on using 33 pose landmarks to drive a mesh with thousands of vertices — no depth sensor</p>
 
@@ -118,11 +172,88 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
 
   <hr class="section-divider">
 
-  <!-- LAYER 2 — Video-dominant + Story -->
-  <div class="video-placeholder hero">
-    <span class="material-symbols-rounded" style="font-size:56px;color:#444;display:block;margin-bottom:12px">play_circle</span>
-    <span class="label">This project is best understood in motion</span>
-    <div class="sublabel">Demo video coming soon</div>
+  <!-- LAYER 2 — Architectural Pipeline Diagram -->
+  <div style="background: #141414; border: 1px solid #282828; border-radius: 12px; padding: 20px; margin: 28px 0;">
+    <h3 style="font-size: 14px; font-weight: 600; color: #e8e8e8; margin-bottom: 12px;">Figure: 33-Landmark Pose Rigging &amp; Deformable Mesh Pipeline</h3>
+    <svg viewBox="0 0 680 240" style="width: 100%; height: auto; display: block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="arGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e293b"/>
+          <stop offset="100%" stop-color="#0f172a"/>
+        </linearGradient>
+        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+        </marker>
+      </defs>
+
+      <!-- Stage 1: Webcam -->
+      <g transform="translate(10, 20)">
+        <rect width="115" height="100" rx="8" fill="url(#arGrad)" stroke="#334155" stroke-width="1.5"/>
+        <text x="57" y="32" fill="#94a3b8" font-size="11" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">INPUT STAGE</text>
+        <text x="57" y="55" fill="#f8fafc" font-size="13" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">Webcam Feed</text>
+        <text x="57" y="74" fill="#64748b" font-size="10.5" font-family="JetBrains Mono, monospace" text-anchor="middle">RGB @ 60 FPS</text>
+        <text x="57" y="90" fill="#38bdf8" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">Zero Depth Sensor</text>
+      </g>
+
+      <!-- Arrow 1 -->
+      <line x1="125" y1="70" x2="148" y2="70" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Stage 2: MediaPipe Pose -->
+      <g transform="translate(150, 20)">
+        <rect width="140" height="100" rx="8" fill="url(#arGrad)" stroke="#0284c7" stroke-width="1.5"/>
+        <text x="70" y="32" fill="#38bdf8" font-size="11" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">KEYPOINT TRACKER</text>
+        <text x="70" y="55" fill="#f8fafc" font-size="13" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">MediaPipe Pose</text>
+        <text x="70" y="74" fill="#64748b" font-size="10.5" font-family="JetBrains Mono, monospace" text-anchor="middle">33 (x, y, z, v) Joint</text>
+        <text x="70" y="90" fill="#818cf8" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">Upper Torso Anchors</text>
+      </g>
+
+      <!-- Arrow 2 -->
+      <line x1="290" y1="70" x2="313" y2="70" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Stage 3: Jitter Filter -->
+      <g transform="translate(315, 20)">
+        <rect width="115" height="100" rx="8" fill="url(#arGrad)" stroke="#334155" stroke-width="1.5"/>
+        <text x="57" y="32" fill="#94a3b8" font-size="11" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">SMOOTHING</text>
+        <text x="57" y="55" fill="#f8fafc" font-size="13" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">1€ Filter</text>
+        <text x="57" y="74" fill="#64748b" font-size="10.5" font-family="JetBrains Mono, monospace" text-anchor="middle">Adaptive Cutoff</text>
+        <text x="57" y="90" fill="#34d399" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">Zero Jitter / Lag</text>
+      </g>
+
+      <!-- Arrow 3 -->
+      <line x1="430" y1="70" x2="453" y2="70" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Stage 4: Mesh Binding -->
+      <g transform="translate(455, 20)">
+        <rect width="135" height="100" rx="8" fill="url(#arGrad)" stroke="#818cf8" stroke-width="1.5"/>
+        <text x="67" y="32" fill="#a5b4fc" font-size="11" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">DEFORMATION</text>
+        <text x="67" y="55" fill="#f8fafc" font-size="13" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">Mesh Rigging</text>
+        <text x="67" y="74" fill="#64748b" font-size="10.5" font-family="JetBrains Mono, monospace" text-anchor="middle">Linear Blend Skin</text>
+        <text x="67" y="90" fill="#c084fc" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">W ∈ ℝ^(V × 33)</text>
+      </g>
+
+      <!-- Arrow 4 -->
+      <line x1="590" y1="70" x2="613" y2="70" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Stage 5: WebGL Display -->
+      <g transform="translate(615, 20)">
+        <rect width="55" height="100" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="27" y="48" fill="#a5b4fc" font-size="11" font-family="Inter, sans-serif" text-anchor="middle" font-weight="600">WebGL</text>
+        <text x="27" y="72" fill="#38bdf8" font-size="12" font-family="JetBrains Mono, monospace" text-anchor="middle" font-weight="700">60</text>
+        <text x="27" y="88" fill="#94a3b8" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">FPS</text>
+      </g>
+
+      <!-- Bottom Details Bar -->
+      <rect x="10" y="140" width="660" height="85" rx="8" fill="#090d16" stroke="#1e293b" stroke-width="1"/>
+      <circle cx="35" cy="165" r="5" fill="#38bdf8"/>
+      <text x="50" y="169" fill="#f1f5f9" font-size="12" font-family="Inter, sans-serif" font-weight="500">Shoulder Anchor Vector (Landmarks #11, #12): Computes torso plane normal &amp; roll angle</text>
+
+      <circle cx="35" cy="188" r="5" fill="#818cf8"/>
+      <text x="50" y="192" fill="#cbd5e1" font-size="12" font-family="Inter, sans-serif">Spine &amp; Hip Base (#23, #24): Controls garment vertical stretch, drape physics &amp; depth sorting</text>
+
+      <circle cx="35" cy="210" r="5" fill="#34d399"/>
+      <text x="50" y="214" fill="#cbd5e1" font-size="12" font-family="Inter, sans-serif">Arm Rigging (#13, #14, #15, #16): Smooth inverse kinematics sleeve deformation (&lt;33ms frame budget)</text>
+    </svg>
+    <p style="font-size: 12.5px; color: #888; margin-top: 10px; margin-bottom: 0;">End-to-end client-side deformation pipeline: transforms 33 sparse MediaPipe landmark coordinates into dense 3D polygonal vertex offsets via Linear Blend Skinning running at 60 FPS in WebGL.</p>
   </div>
 
   <h2>The actual hard part</h2>
@@ -179,6 +310,25 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
 
   <hr class="section-divider">
 
+  <!-- LAYER 4 — Documentation & Guides -->
+  <h2>Project Documentation &amp; Technical Notes</h2>
+  <p>Specifications for pose landmark tracking, mesh deformation, and real-time WebGL rendering:</p>
+
+  <div class="doc-list">
+    <a href="docs/README.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">description</span>
+        <div>
+          <div class="doc-name">ARWear Architecture &amp; Pose Rigging Specification</div>
+          <div class="doc-meta">README.md · MediaPipe 33 Landmark Mesh Deformation</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+  </div>
+
+  <hr class="section-divider">
+
   <!-- BOTTOM — Limitations -->
   <div class="limitations">
     <h2>Limitations</h2>
@@ -192,5 +342,6 @@ p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
   </div>
 
 </div>
+<script type="module" src="../figures.js"></script>
 </body>
 </html>

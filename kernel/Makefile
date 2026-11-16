@@ -2,9 +2,8 @@ EMCC = ../emsdk/upstream/emscripten/emcc
 
 SRCS = core/kernel.c core/vfs.c core/resume.c \
        core/project_arecanut.c core/project_gem.c \
-       core/project_dlframework.c core/project_arshirt.c \
-       core/project_runeos.c core/vectors_data.c \
-       kernel_wasm.c
+       core/project_sa2.c core/project_arshirt.c \
+       core/project_runeos.c kernel_wasm.c
 INC  = -I include
 
 OUT_DIR = ../wasm

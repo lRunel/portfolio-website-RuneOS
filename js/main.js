@@ -31,8 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const fname = iconItem.querySelector('.f-name').textContent;
             if (fname === 'projects') {
                 AppManager.launch('projects');
-            } else if (fname.endsWith('.pdf')) {
-                AppManager.launch('html-viewer', {title: fname, src: '__KERNEL__', temp: true});
             } else {
                 AppManager.launch('text-viewer', {filename: fname, temp: true});
             }

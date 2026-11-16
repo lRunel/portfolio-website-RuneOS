@@ -231,40 +231,39 @@ int vfs_touch(vfs_node_t *root, const char *path)
 
     return E_OK;
 }
-// Removed legacy resume.txt. Resume is now dynamically served via resume.html
 
 /* Forward declarations for project HTML getters */
-extern const char *get_project_arecanut_html(void);
-extern const char *get_project_gem_html(void);
-extern const char *get_project_dlframework_html(void);
-extern const char *get_project_arshirt_html(void);
-extern const char *get_project_runeos_html(void);
+extern const char *get_project_arecanut_text(void);
+extern const char *get_project_gem_text(void);
+extern const char *get_project_sa2_text(void);
+extern const char *get_project_arshirt_text(void);
+extern const char *get_project_runeos_text(void);
 
 /* Read functions for project files */
 static int project_arecanut_read(vfs_node_t *node, char *buffer, size_t size) {
-    const char *html = get_project_arecanut_html();
+    const char *html = get_project_arecanut_text();
     return snprintf(buffer, size, "%s", html);
 }
 static int project_gem_read(vfs_node_t *node, char *buffer, size_t size) {
-    const char *html = get_project_gem_html();
+    const char *html = get_project_gem_text();
     return snprintf(buffer, size, "%s", html);
 }
-static int project_dlframework_read(vfs_node_t *node, char *buffer, size_t size) {
-    const char *html = get_project_dlframework_html();
+static int project_sa2_read(vfs_node_t *node, char *buffer, size_t size) {
+    const char *html = get_project_sa2_text();
     return snprintf(buffer, size, "%s", html);
 }
 static int project_arshirt_read(vfs_node_t *node, char *buffer, size_t size) {
-    const char *html = get_project_arshirt_html();
+    const char *html = get_project_arshirt_text();
     return snprintf(buffer, size, "%s", html);
 }
 static int project_runeos_read(vfs_node_t *node, char *buffer, size_t size) {
-    const char *html = get_project_runeos_html();
+    const char *html = get_project_runeos_text();
     return snprintf(buffer, size, "%s", html);
 }
 
 /* VFS file nodes for each project */
 static vfs_node_t project_arecanut_file = {
-    .name = "arecanut.html",
+    .name = "arecanut.txt",
     .type = VFS_FILE,
     .child_count = 0,
     .children = NULL,
@@ -273,7 +272,7 @@ static vfs_node_t project_arecanut_file = {
     .owner = OWNER_SYSTEM
 };
 static vfs_node_t project_gem_file = {
-    .name = "gem.html",
+    .name = "gem.txt",
     .type = VFS_FILE,
     .child_count = 0,
     .children = NULL,
@@ -281,17 +280,17 @@ static vfs_node_t project_gem_file = {
     .write = NULL,
     .owner = OWNER_SYSTEM
 };
-static vfs_node_t project_dlframework_file = {
-    .name = "dlframework.html",
+static vfs_node_t project_sa2_file = {
+    .name = "sa2.txt",
     .type = VFS_FILE,
     .child_count = 0,
     .children = NULL,
-    .read = project_dlframework_read,
+    .read = project_sa2_read,
     .write = NULL,
     .owner = OWNER_SYSTEM
 };
 static vfs_node_t project_arshirt_file = {
-    .name = "arshirt.html",
+    .name = "arshirt.txt",
     .type = VFS_FILE,
     .child_count = 0,
     .children = NULL,
@@ -300,7 +299,7 @@ static vfs_node_t project_arshirt_file = {
     .owner = OWNER_SYSTEM
 };
 static vfs_node_t project_runeos_file = {
-    .name = "runeos.html",
+    .name = "runeos.txt",
     .type = VFS_FILE,
     .child_count = 0,
     .children = NULL,
@@ -312,7 +311,7 @@ static vfs_node_t project_runeos_file = {
 static vfs_node_t *projects_children[MAX_DIR_CHILDREN] = {
     &project_arecanut_file,
     &project_gem_file,
-    &project_dlframework_file,
+    &project_sa2_file,
     &project_arshirt_file,
     &project_runeos_file
 };
@@ -327,26 +326,26 @@ static vfs_node_t projects_dir={
     .data=NULL,
     .owner=OWNER_USER
 };
-extern const char *get_resume_html(void);
+extern const char *get_resume_text(void);
 
-static int resume_html_read(vfs_node_t *node, char *buffer, size_t size) {
-    const char *html = get_resume_html();
+static int resume_text_read(vfs_node_t *node, char *buffer, size_t size) {
+    const char *html = get_resume_text();
     return snprintf(buffer, size, "%s", html);
 }
 
-static vfs_node_t resume_html_file = {
-    .name = "resume.html",
+static vfs_node_t resume_text_file = {
+    .name = "resume.txt",
     .type = VFS_FILE,
     .child_count = 0,
     .children = NULL,
-    .read = resume_html_read,
+    .read = resume_text_read,
     .write = NULL,
     .owner = OWNER_SYSTEM
 };
 
 static vfs_node_t *home_children[MAX_DIR_CHILDREN]={
     &projects_dir,
-    &resume_html_file
+    &resume_text_file
 };
 static vfs_node_t kernel_state_file = {
     .name = "state",
@@ -388,35 +387,10 @@ static vfs_node_t ai_output_file = {
     .owner = OWNER_USER
 };
 
-extern const char *get_vectors_json(void);
-
-static int ai_vectors_read(vfs_node_t *node, char *buffer, size_t size) {
-    const char *json = get_vectors_json();
-    size_t len = strlen(json);
-    if (len >= size) {
-        strncpy(buffer, json, size - 1);
-        buffer[size - 1] = '\0';
-        return size - 1;
-    }
-    strcpy(buffer, json);
-    return len;
-}
-
-static vfs_node_t ai_vectors_file = {
-    .name = "vectors.json",
-    .type = VFS_FILE,
-    .children = NULL,
-    .child_count = 0,
-    .read = ai_vectors_read,
-    .write = NULL,
-    .data = NULL,
-    .owner = OWNER_SYSTEM
-};
 static vfs_node_t *ai_children[MAX_DIR_CHILDREN] = {
     &ai_input_file,
     &ai_status_file,
-    &ai_output_file,
-    &ai_vectors_file
+    &ai_output_file
 };
 static vfs_node_t *kernel_children[MAX_DIR_CHILDREN] = {
     &kernel_state_file
@@ -453,7 +427,7 @@ static vfs_node_t ai_dir = {
     .name = "ai",
     .type = VFS_DIR,
     .children = ai_children,
-    .child_count = 4,
+    .child_count = 3,
     .read = NULL,
     .data = NULL,
     .owner = OWNER_SYSTEM

@@ -120,6 +120,19 @@ pre.diagram {
 
 .section-divider { border: none; border-top: 1px solid #1a1a1a; margin: 48px 0; }
 
+.doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.doc-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #151515; border: 1px solid #282828; border-radius: 8px;
+  padding: 14px 18px; text-decoration: none; transition: all 0.2s;
+}
+.doc-item:hover { background: #1c1c1c; border-color: #3b3b3b; transform: translateY(-1px); }
+.doc-info { display: flex; align-items: center; gap: 12px; }
+.doc-icon { color: #818cf8; font-size: 20px; }
+.doc-name { font-size: 14px; font-weight: 500; color: #e8e8e8; }
+.doc-meta { font-size: 12px; color: #666; font-family: 'JetBrains Mono', monospace; }
+.doc-link-btn { font-size: 12px; color: #888; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
 @media (max-width: 600px) {
   .metrics-row { grid-template-columns: repeat(3, 1fr); }
   .syscall-row { grid-template-columns: 90px 30px 1fr; font-size: 11px; }
@@ -129,11 +142,20 @@ pre.diagram {
   .metrics-row { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
+<link rel="stylesheet" href="../project.css">
 </head>
-<body>
+<body style="--accent:#b48cf2">
+<nav class="project-nav-bar">
+  <a href="../../index.html">← Back to Rune-os</a>
+  <div class="nav-links">
+    <a href="https://github.com/lRunel/portfolio-website-RuneOS" target="_blank" rel="noopener">GitHub ↗</a>
+    <a href="../../assets/Shubham_Chowta_SWE_Backend.pdf" target="_blank">Resume PDF ↗</a>
+  </div>
+</nav>
 <div class="page">
 
   <!-- LAYER 1 — Above the fold -->
+  <div class="hero-figure"><div data-figure="terminal"></div></div>
   <h1>Rune-os v1.0</h1>
   <p class="claim">A portfolio that boots — 31 KB of C compiled to WebAssembly, with a real process scheduler, virtual filesystem, and 9 syscalls running in your browser right now</p>
 
@@ -236,6 +258,47 @@ pre.diagram {
 
   <hr class="section-divider">
 
+  <!-- LAYER 4 — Kernel Documentation & Architecture -->
+  <h2>Kernel Architecture &amp; System Documentation</h2>
+  <p>Specifications for the C WebAssembly kernel, virtual filesystem, and system call interfaces:</p>
+
+  <div class="doc-list">
+    <a href="docs/ARCHITECTURE.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">terminal</span>
+        <div>
+          <div class="doc-name">RuneOS Kernel &amp; Desktop Architecture</div>
+          <div class="doc-meta">ARCHITECTURE.md · 14 KB · Syscall Loop, VFS Tree &amp; Emscripten Exports</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/KERNEL_API.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">code</span>
+        <div>
+          <div class="doc-name">Kernel Syscall API Reference</div>
+          <div class="doc-meta">KERNEL_API.md · 6 KB · Complete Syscall Specification</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/README.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">description</span>
+        <div>
+          <div class="doc-name">RuneOS Desktop Environment Manual</div>
+          <div class="doc-meta">README.md · 14 KB · HD-2D Parallax Engine &amp; Bridge</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+  </div>
+
+  <hr class="section-divider">
+
   <!-- BOTTOM — Retrospective -->
   <div class="retro">
     <h2>What I'd do differently</h2>
@@ -248,5 +311,6 @@ pre.diagram {
   </div>
 
 </div>
+<script type="module" src="../figures.js"></script>
 </body>
 </html>

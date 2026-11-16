@@ -1,0 +1,101 @@
+/* project.css — shared polish for every project page.
+   Loaded after each page's inline <style>, so these rules win on conflicts.
+   Each page sets its own --accent on <body>. */
+
+:root { --accent: #5ba0f5; --text: #e8e8ec; --muted: #a1a1aa; --line: rgba(255, 255, 255, 0.08); }
+
+body {
+  background:
+    radial-gradient(900px 420px at 50% -120px, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    #0b0b0e;
+  color: var(--text);
+}
+
+.page { max-width: 780px; padding: 56px 24px 96px; }
+
+/* Nav */
+.project-nav-bar {
+  position: sticky; top: 0; z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 24px;
+  background: rgba(11, 11, 14, 0.8);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.project-nav-bar a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; }
+.project-nav-bar a:hover { color: #fff; text-decoration: none; }
+.project-nav-bar .nav-links { display: flex; gap: 18px; }
+
+/* Type */
+h1 { font-size: clamp(32px, 5vw, 44px); font-weight: 650; letter-spacing: -0.02em; line-height: 1.1; color: #fff; margin-bottom: 14px; }
+h2 { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; color: #fff; margin-top: 56px; margin-bottom: 16px; }
+h3 { color: #fff; }
+p, li { color: var(--muted); font-size: 15px; line-height: 1.75; }
+strong { color: var(--text); }
+.claim { font-size: 18px; line-height: 1.6; color: #c9c9d1; margin-bottom: 28px; }
+a { color: var(--accent); }
+
+/* Metrics */
+.metric-card {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, #141418), #121216);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.metric-value { font-size: 30px; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+.metric-label { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+/* Badges & pills */
+.badge, .pill {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  color: #c4c4cc;
+}
+
+/* Callouts & highlights */
+.callout {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+}
+.highlight { border-color: var(--line); }
+.highlight-title { color: #fff; }
+
+/* Media & diagrams */
+img { border-radius: 10px; }
+pre, .diagram { border-radius: 12px; border: 1px solid var(--line); background: #0f0f13; }
+.section-divider { border: none; border-top: 1px solid var(--line); margin: 48px 0; }
+
+/* Document links */
+.doc-item {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  transition: border-color 0.15s, background 0.15s;
+}
+.doc-item:hover { border-color: color-mix(in srgb, var(--accent) 50%, transparent); background: rgba(255, 255, 255, 0.05); }
+.doc-icon, .doc-link-btn { color: var(--accent); }
+
+@media (max-width: 600px) {
+  .page { padding: 32px 16px 72px; }
+  .project-nav-bar { padding: 10px 16px; }
+}
+
+/* Interactive hero figure (hairline) — lines in the page accent */
+.hero-figure {
+  --hairline-plate: #0b0b0e;
+  --hairline-hi: var(--accent);
+  --hairline-edge: color-mix(in srgb, var(--accent) 55%, #6a6a78);
+  --hairline-mid: #44444f;
+  --hairline-lo: #24242c;
+  --hairline-stroke: 1;
+  float: right;
+  width: 280px;
+  margin: -8px 0 12px 28px;
+}
+.hero-figure > div { width: 100%; }
+@media (max-width: 720px) {
+  .hero-figure { float: none; width: 220px; margin: 0 auto 8px; }
+}

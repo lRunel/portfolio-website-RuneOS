@@ -1,0 +1,371 @@
+<!-- FILE: projects/sa2/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SA2 (CampusFL) — distributed training across laptops and Android phones, with a Soft Actor-Critic agent that decides how long to wait for slow devices.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+<title>SA2 (CampusFL) — Distributed Training on Mixed Devices</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0d0d0d;
+  color: #e8e8e8;
+  line-height: 1.65;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: rgba(255,255,255,0.1); color: #fff; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+
+.page { max-width: 720px; margin: 0 auto; padding: 32px 24px; }
+
+h1 { font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 500; color: #e8e8e8; margin-bottom: 8px; }
+h2 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 500; color: #e8e8e8; margin-bottom: 16px; margin-top: 48px; }
+p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
+.claim { font-size: 15px; color: #888888; line-height: 1.6; margin-bottom: 20px; }
+
+.metric-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px;
+  padding: 16px; display: inline-block; margin-bottom: 20px;
+}
+.metric-value { font-family: 'JetBrains Mono', monospace; font-size: 28px; color: #e8e8e8; }
+.metric-label { font-family: 'Inter', sans-serif; font-size: 12px; color: #666666; margin-top: 4px; }
+
+.badge-row { margin-bottom: 16px; }
+.badge {
+  display: inline-block; background: #1e1e1e; border: 1px solid #333;
+  border-radius: 4px; padding: 3px 10px; font-size: 12px;
+  font-family: 'Inter', sans-serif; color: #888; margin-right: 6px; margin-bottom: 6px;
+}
+.badge-muted {
+  display: inline-block; background: transparent; border: 1px solid #2a2a2a;
+  border-radius: 4px; padding: 3px 10px; font-size: 11px;
+  font-family: 'Inter', sans-serif; color: #555; margin-bottom: 16px;
+}
+
+.callout {
+  background: #141414; border-left: 3px solid #3b82f6;
+  border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;
+}
+.callout p { color: #888888; margin-bottom: 0; }
+.callout p + p { margin-top: 12px; }
+
+.video-placeholder {
+  background: #1a1a1a; border: 1px dashed #333; border-radius: 16px;
+  padding: 56px 24px; text-align: center; margin: 24px 0;
+}
+.video-placeholder .label { font-family: 'Inter', sans-serif; font-size: 14px; color: #555; }
+.video-placeholder .sublabel { font-family: 'Inter', sans-serif; font-size: 12px; color: #444; margin-top: 4px; }
+
+pre.diagram {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  background: #141414; padding: 20px; border-radius: 8px;
+  border: 1px solid #2a2a2a; overflow-x: auto; white-space: pre;
+  color: #888; line-height: 1.5;
+}
+
+.diagram-note {
+  font-family: 'Inter', sans-serif; font-size: 12px; color: #555;
+  margin-top: 12px; line-height: 1.5;
+}
+
+.highlight { margin-bottom: 24px; }
+.highlight-title { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: #e8e8e8; margin-bottom: 6px; }
+.highlight p { font-size: 13.5px; color: #888; }
+
+.tech-stack { margin: 32px 0; }
+.pill {
+  display: inline-block; background: #1e1e1e; border: 1px solid #333;
+  border-radius: 4px; padding: 3px 10px; font-size: 12px;
+  font-family: 'Inter', sans-serif; color: #888; margin-right: 6px; margin-bottom: 6px;
+}
+
+.limitations { margin-top: 48px; }
+.limitations h2 { font-size: 14px; color: #555; text-transform: uppercase; letter-spacing: 1.5px; }
+.limitations ul { list-style: none; padding: 0; }
+.limitations li {
+  font-size: 13.5px; color: #666; padding: 6px 0 6px 16px; position: relative; line-height: 1.5;
+}
+.limitations li::before { content: "—"; position: absolute; left: 0; color: #444; }
+
+.section-divider { border: none; border-top: 1px solid #1a1a1a; margin: 48px 0; }
+
+.doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.doc-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #151515; border: 1px solid #282828; border-radius: 8px;
+  padding: 14px 18px; text-decoration: none; transition: all 0.2s;
+}
+.doc-item:hover { background: #1c1c1c; border-color: #3b3b3b; transform: translateY(-1px); }
+.doc-info { display: flex; align-items: center; gap: 12px; }
+.doc-icon { color: #3b82f6; font-size: 20px; }
+.doc-name { font-size: 14px; font-weight: 500; color: #e8e8e8; }
+.doc-meta { font-size: 12px; color: #666; font-family: 'JetBrains Mono', monospace; }
+.doc-link-btn { font-size: 12px; color: #888; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
+/* Sticky Nav Bar */
+.project-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #222;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-nav-bar a {
+  color: #6bb5ff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.project-nav-bar a:hover {
+  color: #9dd0ff;
+  text-decoration: underline;
+}
+.project-nav-bar .nav-links {
+  display: flex;
+  gap: 16px;
+}
+</style>
+<link rel="stylesheet" href="../project.css">
+</head>
+<body style="--accent:#5ba0f5">
+<nav class="project-nav-bar">
+  <a href="../../index.html">← Back to Rune-os</a>
+  <div class="nav-links">
+    <a href="../../assets/Shubham_Chowta_SWE_Backend.pdf" target="_blank">Resume PDF ↗</a>
+  </div>
+</nav>
+<div class="page">
+
+  <!-- LAYER 1 — Above the fold -->
+  <div class="hero-figure"><div data-figure="hub"></div></div>
+  <h1>SA2 (CampusFL)</h1>
+  <p class="claim">Distributed training across the laptops and phones people already have. Devices can join or drop out mid-run without stopping training. Built with a team of 4.</p>
+
+  <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+    <div class="metric-card">
+      <div class="metric-value">94.07%</div>
+      <div class="metric-label">MNIST accuracy in a 5-min run (synchronous: 84.62%)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">6</div>
+      <div class="metric-label">devices: 3 gaming laptops + 3 Android phones</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">2.2 MB → 448 KB</div>
+      <div class="metric-label">CNN update size with top-10% gradient sparsification</div>
+    </div>
+  </div>
+
+  <p>Most distributed training assumes a dedicated cluster of identical machines. SA2 uses personal devices instead, which are uneven: a gaming laptop finishes a round many times faster than a phone, and phones drop off Wi-Fi. If the server waits for everyone each round, the fast machines sit idle. If it waits for no one, slow devices' updates arrive late and hurt the model. SA2 handles this with a time-limited round and a learned policy for how long to wait.</p>
+
+  <div class="badge-row">
+    <a href="docs/RESEARCH_PAPER.md" class="badge" target="_blank" style="text-decoration:none; color:#e8e8e8; border-color:#555;">Read Paper ↗</a>
+    <a href="docs/EVALUATION_REPORT.md" class="badge" target="_blank" style="text-decoration:none; color:#e8e8e8; border-color:#555;">Evaluation ↗</a>
+    <span class="badge">PyTorch</span>
+    <span class="badge">FastAPI</span>
+    <span class="badge">Soft Actor-Critic</span>
+    <span class="badge">Android</span>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- LAYER 2 — How it works and what the results show -->
+  <h2>How the controller decides</h2>
+  <div class="callout">
+    <p>Each round, a <strong>Soft Actor-Critic (SAC)</strong> reinforcement-learning agent looks at the current state of the fleet and picks three things: how long to wait for gradients (<em>T<sub>optimal</sub></em>), how much to sparsify them (<em>S<sub>ratio</sub></em>), and how stale an update may be before it is dropped (<em>S<sub>max</sub></em>). The agent is warm-started by imitating a hand-written heuristic, then keeps learning online.</p>
+  </div>
+
+  <h2>Results</h2>
+  <p>Each configuration was run once for 5 minutes on MNIST with the same 6 devices:</p>
+  <table style="width:100%; border-collapse:collapse; font-size:14px; margin: 8px 0 16px;">
+    <thead><tr style="color:#e8e8e8; text-align:left;"><th style="padding:6px 8px; border-bottom:1px solid #333;">Strategy</th><th style="padding:6px 8px; border-bottom:1px solid #333; text-align:right;">Accuracy</th></tr></thead>
+    <tbody style="color:#aaa;">
+      <tr><td style="padding:6px 8px;">Synchronous (wait for every device)</td><td style="padding:6px 8px; text-align:right;">84.62%</td></tr>
+      <tr><td style="padding:6px 8px;">Plain asynchronous</td><td style="padding:6px 8px; text-align:right;">87.86%</td></tr>
+      <tr><td style="padding:6px 8px;">Fixed heuristic wait time</td><td style="padding:6px 8px; text-align:right;">94.36%</td></tr>
+      <tr><td style="padding:6px 8px;"><strong style="color:#e8e8e8;">SAC controller</strong></td><td style="padding:6px 8px; text-align:right;"><strong style="color:#e8e8e8;">94.07%</strong></td></tr>
+      <tr><td style="padding:6px 8px;">SAC without dynamic workload allocation</td><td style="padding:6px 8px; text-align:right;">94.91%</td></tr>
+      <tr><td style="padding:6px 8px;">SAC without the staleness filter</td><td style="padding:6px 8px; text-align:right;">95.36%</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <p><strong>What this shows:</strong> bounding each round in time, instead of waiting for the slowest phone, is worth about 9–10 points over synchronous training in the same 5 minutes. The SAC controller performs about the same as a well-tuned fixed heuristic but does not beat it, and two ablations scored slightly higher. With one run per setting these differences are within noise, so the honest conclusion is that SAC matches the heuristic without hand-tuning, not that it outperforms it.</p>
+  </div>
+
+  <div class="empirical-figures" style="margin: 28px 0;">
+    <div style="background: #141414; border: 1px solid #282828; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+      <h3 style="font-size: 14px; font-weight: 600; color: #e8e8e8; margin-bottom: 8px;">Figure 1: Accuracy over wall-clock time</h3>
+      <img src="comprehensive_convergence.png" alt="SA2 accuracy over time: SAC, heuristic asynchronous and synchronous strategies" style="width: 100%; border-radius: 8px; border: 1px solid #222; display: block;">
+      <p style="font-size: 12.5px; color: #888; margin-top: 10px; margin-bottom: 0;">SAC vs. heuristic asynchronous vs. synchronous training over the 5-minute run.</p>
+    </div>
+    <div style="background: #141414; border: 1px solid #282828; border-radius: 12px; padding: 18px;">
+      <h3 style="font-size: 14px; font-weight: 600; color: #e8e8e8; margin-bottom: 8px;">Figure 2: Throughput from laptops vs. phones</h3>
+      <img src="comprehensive_contribution.png" alt="Bar chart of laptop and phone throughput under synchronous, heuristic asynchronous and SAC strategies" style="width: 100%; border-radius: 8px; border: 1px solid #222; display: block;">
+      <p style="font-size: 12.5px; color: #888; margin-top: 10px; margin-bottom: 0;">Combined training throughput (samples/sec) from the 3 laptops and the 3 phones under each strategy. Synchronous rounds leave both groups underused. Phones ran the <code>CampusFL-Worker</code> Android app.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- LAYER 3 — Architecture -->
+  <h2>Architecture</h2>
+
+<pre class="diagram">
+┌──────────────────────────────────────────┐
+│         Controller (FastAPI :8000)       │
+│                                          │
+│  Global model · Dataset · Gradient buf   │
+│  POST /register                          │
+│  GET  /get_task  (weights + batch)       │
+│  POST /send_gradients                    │
+└────────────────┬─────────────────────────┘
+                 │
+       ┌─────────┼─────────┐
+       │         │         │
+  ┌────┴───┐ ┌───┴───┐ ┌───┴───┐
+  │Worker 1│ │Worker2│ │WorkerN│
+  │ laptop │ │ phone │ │ slow  │
+  │  k=30  │ │  k=15 │ │  k=8  │
+  └────────┘ └───────┘ └───────┘
+  (join or leave at any time — training continues)
+</pre>
+
+  <p class="diagram-note">k = local training steps per task, set from each worker's measured throughput: 30 for fast laptops (&gt;500 samples/s), 15 for typical devices and phones, 8 for very slow ones.</p>
+
+  <h2>Technical Highlights</h2>
+
+  <div class="highlight">
+    <div class="highlight-title">1. Dynamic workload allocation</div>
+    <p>Workers report their measured samples per second, and the controller sizes each task to match: fast laptops get 30 local steps, phones 15, and very slow devices 8. Batch size is also scaled by each device's resource profile. Turning this off (fixed k for everyone) was one of the ablations.</p>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">2. Staleness dropping</div>
+    <p>The controller tracks how many global steps have elapsed since a gradient was computed. Gradients older than the staleness threshold are discarded rather than applied — preventing stale updates from corrupting the model.</p>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">3. Android workers</div>
+    <p>Phones join through the CampusFL-Worker Android app, or by running the Python worker under Termux.</p>
+  </div>
+
+  <div class="tech-stack">
+    <span class="pill">Python</span>
+    <span class="pill">PyTorch</span>
+    <span class="pill">FastAPI</span>
+    <span class="pill">Uvicorn</span>
+    <span class="pill">Async SGD</span>
+    <span class="pill">Android</span>
+    <span class="pill">Termux</span>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- LAYER 4 — Documentation, Textbooks & Papers -->
+  <h2>Documentation</h2>
+  <p>Write-ups, study notes and evaluation reports:</p>
+
+  <div class="doc-list">
+    <a href="docs/TEXTBOOK_PART1.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">menu_book</span>
+        <div>
+          <div class="doc-name">Textbook (Part 1): Distributed Deep Learning Foundations &amp; Async SGD</div>
+          <div class="doc-meta">TEXTBOOK_PART1.md · 22 KB · Theoretical Foundations, Gradients &amp; Staleness</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Read Textbook ↗</div>
+    </a>
+
+    <a href="docs/TEXTBOOK_PART2.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">menu_book</span>
+        <div>
+          <div class="doc-name">Textbook (Part 2): Implementation, Heterogeneous Scheduling &amp; Optimization</div>
+          <div class="doc-meta">TEXTBOOK_PART2.md · 21 KB · FastAPI Controller, Termux Workers, k-Step Heuristics</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Read Textbook ↗</div>
+    </a>
+
+    <a href="docs/RESEARCH_PAPER.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">description</span>
+        <div>
+          <div class="doc-name">Research Paper: Opportunistic Deep Learning on Heterogeneous Personal Devices</div>
+          <div class="doc-meta">RESEARCH_PAPER.md · 28 KB · Complete Academic Manuscript</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Read Paper ↗</div>
+    </a>
+
+
+    <a href="docs/ARCHITECTURE.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">account_tree</span>
+        <div>
+          <div class="doc-name">Distributed Framework Architecture Specification</div>
+          <div class="doc-meta">ARCHITECTURE.md · 21 KB · Full Pipeline &amp; Protocol Design</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/DRL_COMPARISON_REPORT.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">analytics</span>
+        <div>
+          <div class="doc-name">DRL Comparison &amp; Benchmark Report</div>
+          <div class="doc-meta">DRL_COMPARISON_REPORT.md · 9 KB · Comparative Empirical Study</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/EVALUATION_REPORT.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">fact_check</span>
+        <div>
+          <div class="doc-name">Empirical Evaluation &amp; Convergence Report</div>
+          <div class="doc-meta">EVALUATION_REPORT.md · 3 KB · Convergence Tests &amp; Loss Metrics</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- BOTTOM — Capabilities & Current Scoping -->
+  <div class="limitations">
+    <h2>Scope &amp; limitations</h2>
+    <ul>
+      <li>Results are single 5-minute runs on MNIST, a small dataset: one laptop CPU reaches 99.13% on its own in about 2 minutes. These experiments test how well the system copes with uneven, unreliable devices, not raw training speed.</li>
+      <li>A CIFAR-10 run with 6 workers did not complete, so larger datasets are untested.</li>
+      <li>Single-machine baselines were run for five models (CNN, MLP, RNN, a small transformer, and a small feed-forward net; 214K–537K parameters); the distributed runs used the CNN.</li>
+      <li>Tested on local Wi-Fi/LAN only; workers across the internet would need NAT traversal.</li>
+    </ul>
+  </div>
+</div>
+<script type="module" src="../figures.js"></script>
+</body>
+</html>

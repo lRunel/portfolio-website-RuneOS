@@ -1,0 +1,413 @@
+<!-- FILE: projects/awsolotl/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AWSolotl (Project Lockstep Recall) — The Brake, Not Just the Driver. Autonomous AI safety control plane with Cedar policy checks, causal inference SCM, and cryptographic audit ledger.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+<title>AWSolotl — Autonomous Cloud Ops Safety Control Plane</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0d0d0d;
+  color: #e8e8e8;
+  line-height: 1.65;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: rgba(255,255,255,0.1); color: #fff; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+
+.page { max-width: 760px; margin: 0 auto; padding: 32px 24px; }
+
+h1 { font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 500; color: #e8e8e8; margin-bottom: 8px; }
+h2 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 500; color: #e8e8e8; margin-bottom: 16px; margin-top: 48px; }
+h3 { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; color: #e8e8e8; margin-bottom: 10px; margin-top: 24px; }
+p { font-size: 14.5px; color: #888888; line-height: 1.7; margin-bottom: 16px; }
+.claim { font-size: 15px; color: #888888; line-height: 1.6; margin-bottom: 20px; }
+
+.metric-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.metric-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px;
+  padding: 16px; flex: 1; min-width: 150px;
+}
+.metric-value { font-family: 'JetBrains Mono', monospace; font-size: 24px; color: #e8e8e8; }
+.metric-label { font-family: 'Inter', sans-serif; font-size: 12px; color: #666666; margin-top: 4px; }
+
+.badge-row { margin-bottom: 24px; }
+.badge {
+  display: inline-block; background: #1e1e1e; border: 1px solid #333;
+  border-radius: 4px; padding: 4px 10px; font-size: 12px;
+  font-family: 'Inter', sans-serif; color: #888; margin-right: 6px; margin-bottom: 6px;
+  text-decoration: none;
+}
+.badge-gold {
+  background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24; font-weight: 500;
+}
+
+.callout {
+  background: #141414; border-left: 3px solid #f59e0b;
+  border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 24px 0;
+}
+.callout p { color: #888888; margin-bottom: 0; }
+.callout p + p { margin-top: 12px; }
+
+.arch-box {
+  background: #111; border: 1px solid #2a2a2a; border-radius: 8px;
+  padding: 20px; margin: 24px 0; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: #aaa; white-space: pre; overflow-x: auto;
+  max-width: 100%; -webkit-overflow-scrolling: touch;
+  line-height: 1.5;
+}
+
+.gate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 20px 0; }
+.gate-card {
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 16px;
+}
+.gate-card .gate-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #f59e0b; font-weight: 600;
+  margin-bottom: 4px;
+}
+.gate-card .gate-title {
+  font-family: 'Inter', sans-serif; font-size: 14px; color: #e8e8e8; font-weight: 500;
+  margin-bottom: 6px;
+}
+.gate-card .gate-desc { font-size: 12.5px; color: #777; line-height: 1.5; }
+
+.docs-section { margin: 32px 0; }
+.doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.doc-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #151515; border: 1px solid #282828; border-radius: 8px;
+  padding: 14px 18px; text-decoration: none; transition: all 0.2s;
+}
+.doc-item:hover { background: #1c1c1c; border-color: #3b3b3b; transform: translateY(-1px); }
+.doc-info { display: flex; align-items: center; gap: 12px; }
+.doc-icon { color: #f59e0b; font-size: 20px; }
+.doc-name { font-size: 14px; font-weight: 500; color: #e8e8e8; }
+.doc-meta { font-size: 12px; color: #666; font-family: 'JetBrains Mono', monospace; }
+.doc-link-btn { font-size: 12px; color: #888; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
+.highlight { margin-bottom: 24px; }
+.highlight-title { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: #e8e8e8; margin-bottom: 6px; }
+.highlight p { font-size: 13.5px; color: #888; }
+
+.tech-stack { margin: 32px 0; }
+.pill {
+  display: inline-block; background: #1e1e1e; border: 1px solid #333;
+  border-radius: 4px; padding: 3px 10px; font-size: 12px;
+  font-family: 'Inter', sans-serif; color: #888; margin-right: 6px; margin-bottom: 6px;
+}
+
+.limitations { margin-top: 48px; }
+.limitations h2 { font-size: 14px; color: #555; text-transform: uppercase; letter-spacing: 1.5px; }
+.limitations ul { list-style: none; padding: 0; }
+.limitations li {
+  font-size: 13.5px; color: #666; padding: 6px 0 6px 16px; position: relative; line-height: 1.5;
+}
+.limitations li::before { content: "—"; position: absolute; left: 0; color: #444; }
+
+.section-divider { border: none; border-top: 1px solid #1a1a1a; margin: 48px 0; }
+
+.github-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #1e1e1e; border: 1px solid #333; border-radius: 6px;
+  padding: 8px 16px; color: #e8e8e8; text-decoration: none;
+  font-size: 13px; font-weight: 500; transition: background 0.2s;
+  margin-top: 8px; margin-bottom: 24px;
+}
+.github-link:hover { background: #2a2a2a; }
+
+/* Sticky Nav Bar */
+.project-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #222;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-nav-bar a {
+  color: #6bb5ff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.project-nav-bar a:hover {
+  color: #9dd0ff;
+  text-decoration: underline;
+}
+.project-nav-bar .nav-links {
+  display: flex;
+  gap: 16px;
+}
+</style>
+<link rel="stylesheet" href="../project.css">
+</head>
+<body style="--accent:#f0a050">
+<nav class="project-nav-bar">
+  <a href="../../index.html">← Back to Rune-os</a>
+  <div class="nav-links">
+    <a href="https://github.com/lRunel/AWSolotl" target="_blank" rel="noopener">GitHub ↗</a>
+    <a href="../../assets/Shubham_Chowta_SWE_Backend.pdf" target="_blank">Resume PDF ↗</a>
+  </div>
+</nav>
+<div class="page">
+
+  <!-- LAYER 1 — Hero & Above the Fold -->
+  <div class="hero-figure"><div data-figure="vault"></div></div>
+  <h1>AWSolotl (Project Lockstep Recall)</h1>
+  <p class="claim">The Brake, Not Just the Driver — An immutable, multi-stage control plane that checks an AI agent's proposed fixes against Cedar policies before they touch AWS, and records every decision in an append-only audit log.</p>
+
+  <div class="badge-row">
+    <span class="badge badge-gold">🏆 WeMake Dev Hackathon Submission</span>
+    <span class="badge">Cedar Policies</span>
+    <span class="badge">Linear-Gaussian SCM</span>
+    <span class="badge">Dynamic IAM Session Broker</span>
+    <span class="badge">WORM Cryptographic Ledger</span>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric-card">
+      <div class="metric-value">5 Gates</div>
+      <div class="metric-label">pure verification pipeline</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">&lt; 60s</div>
+      <div class="metric-label">causal inference SCM ranking</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">900s TTL</div>
+      <div class="metric-label">temporary scoped STS tokens</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">100% WORM</div>
+      <div class="metric-label">tamper-proof audit chain</div>
+    </div>
+  </div>
+
+  <p>Autonomous AI agents are transforming DevOps, but in enterprise production, nobody lets an AI agent press the button without verification. Hallucinated parameters, missing institutional memory, or broad static permissions cause catastrophic outages. AWSolotl solves this by providing <strong>The Brake</strong>: an independent verification plane that validates plans before execution, bounds blast radii with temporary STS credentials, monitors execution in real time, and cryptographically audits every decision.</p>
+
+  <hr class="section-divider">
+
+  <!-- LAYER 2 — Core Architecture & 3 Planes -->
+  <h2>The Three Planes Architecture</h2>
+
+  <div class="callout">
+    <p><strong>Core Thesis:</strong> Diagnosis is a demo. Safety is the product. Cut the brain, never cut the brake.</p>
+    <p>AWSolotl completely decouples untrusted LLM decision-making from deterministic execution and control. Even if the diagnostic LLM is compromised or hallucinates, the control plane mathematically guarantees safety invariants cannot be violated.</p>
+  </div>
+
+  <div class="arch-box">┌────────────────────────────────────────────────────────┐
+│        DEMO APPLICATION (ECS Fargate, 4 Services)       │
+│           web ──> cart ──> payments ──> inventory       │
+└──────────────────────────┬─────────────────────────────┘
+                           │ Telemetry & Events
+                           ▼
+╔═════════════════════════════════════════════════════════╗
+║ PLANE 1: UNDERSTAND (Telemetry & Causal Inference)      ║
+║ • Robust MAD z-score anomaly detection (&lt;60s)           ║
+║ • Topology extraction via AWS X-Ray service graphs      ║
+║ • Linear-Gaussian SCM L2 Residual scoring               ║
+║ • Permutation Falsification (p &lt;= 0.05 honesty gate)    ║
+╚══════════════════════════╤══════════════════════════════╝
+                           │ CausalVerdict {entity, confidence, p-value}
+                           ▼
+╔═════════════════════════════════════════════════════════╗
+║ PLANE 2: DECIDE (Agent & Memory Plane)                  ║
+║ • Deterministic Stage Router: Contain &gt; Preserve &gt; ...  ║
+║ • Typed Tool Registry (No arbitrary CLI / shell)        ║
+║ • Precedent Filter: Filter tools with 100% failure rate ║
+╚══════════════════════════╤══════════════════════════════╝
+                           │ ActionPlan (UNTRUSTED)
+                           ▼
+╔═════════════════════════════════════════════════════════╗
+║ ★ PLANE 3: CONTROL (The Brake - Pure Verification)      ║
+║ ├── Gate 1: Authority &amp; Schema (JSONSchema, tokens)     ║
+║ ├── Gate 2: Policy Proof (Formal Cedar Invariants &amp; Org)║
+║ ├── Gate 3: Radius Verification (Simulated vs Declared) ║
+║ ├── Gate 4: Risk Scoring &amp; Autonomy Ladder (L0 - L2)    ║
+║ └── Gate 5: Watchdog (Step loop detection, auto-rollback║
+║ ─────────────────────────────────────────────────────── ║
+║ BROKER: STS AssumeRole + Dynamic Session Policy (900s)  ║
+║ LEDGER: DynamoDB Hash Chain + S3 Object Lock (WORM)     ║
+╚═════════════════════════════════════════════════════════╝</div>
+
+  <!-- LAYER 3 — The 5 Gates of Control -->
+  <h2>The 5 Gates of Control ("The Brake")</h2>
+
+  <div class="gate-grid">
+    <div class="gate-card">
+      <div class="gate-num">GATE 1</div>
+      <div class="gate-title">Authority &amp; Schema (~5ms)</div>
+      <div class="gate-desc">Validates against rigid JSONSchema, verifies typed tool arguments, and requires valid short-lived capability tokens.</div>
+    </div>
+    <div class="gate-card">
+      <div class="gate-num">GATE 2</div>
+      <div class="gate-title">Formal Policy Proof (~180ms)</div>
+      <div class="gate-desc">Evaluates against AWS Cedar policies and frozen invariants (INV-01 to INV-12), including Black Friday change freezes and database protection.</div>
+    </div>
+    <div class="gate-card">
+      <div class="gate-num">GATE 3</div>
+      <div class="gate-title">Radius Verification (~300ms)</div>
+      <div class="gate-desc">Simulates the plan against live AWS topology. Confirms that affected services match declared blast radius boundaries.</div>
+    </div>
+    <div class="gate-card">
+      <div class="gate-num">GATE 4</div>
+      <div class="gate-title">Risk Scoring &amp; Ladder (~50ms)</div>
+      <div class="gate-desc">Computes multi-factor risk score. Dispatches autonomous execution for low risk (L1/L2) or blocks for human confirmation (L0).</div>
+    </div>
+    <div class="gate-card">
+      <div class="gate-num">GATE 5</div>
+      <div class="gate-title">Active Watchdog (~100ms)</div>
+      <div class="gate-desc">Watches post-execution SLOs in real time. Detects runaway remediation loops and triggers automated rollback if degradation persists.</div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- LAYER 4 — Documentation & Papers -->
+  <h2>Project Documentation &amp; Artifacts</h2>
+  <p>The complete set of specifications, hackathon submissions, architectural decision records, and build books:</p>
+
+  <div class="doc-list">
+    <a href="docs/wemake-hackathon-writeup.pdf" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">picture_as_pdf</span>
+        <div>
+          <div class="doc-name">Official Hackathon Deep-Dive &amp; Submission Paper</div>
+          <div class="doc-meta">wemake-hackathon-writeup.pdf · 201 KB</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Open PDF ↗</div>
+    </a>
+
+    <a href="docs/ResiliAgent-AWS-Hackathon-Build-Book.pdf" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">menu_book</span>
+        <div>
+          <div class="doc-name">ResiliAgent AWS Hackathon Build Book</div>
+          <div class="doc-meta">ResiliAgent-AWS-Hackathon-Build-Book.pdf · 119 KB</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Open PDF ↗</div>
+    </a>
+
+
+    <a href="docs/wemake-hackathon-writeup.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">description</span>
+        <div>
+          <div class="doc-name">Full Hackathon Technical Writeup (Markdown)</div>
+          <div class="doc-meta">wemake-hackathon-writeup.md · 14 KB</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/UI_UX_DESIGN_DOC.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">palette</span>
+        <div>
+          <div class="doc-name">Control Plane UI/UX Design Document</div>
+          <div class="doc-meta">UI_UX_DESIGN_DOC.md · 5 KB</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/causal.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">analytics</span>
+        <div>
+          <div class="doc-name">Causal Inference Specification &amp; SCM Modeling</div>
+          <div class="doc-meta">causal.md · 2 KB</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+    <a href="docs/CORPUS_OUTLINE.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">account_tree</span>
+        <div>
+          <div class="doc-name">Memory Corpus &amp; Institutional Knowledge Base Outline</div>
+          <div class="doc-meta">CORPUS_OUTLINE.md · 5 KB</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- LAYER 5 — Technical Highlights -->
+  <h2>Technical Highlights</h2>
+
+  <div class="highlight">
+    <div class="highlight-title">1. Linear-Gaussian SCM L2 Residual Scoring</div>
+    <p>Standard correlation metrics fail in microservice call graphs because latency cascades downstream. AWSolotl fits a linear regression of each node's latency against its callers and scores the residual deviation. Downstream nodes have residuals near zero, isolating the true root cause with &gt;= 85% Top-3 accuracy on the PetShop benchmark.</p>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">2. Permutation Falsification Honesty Gate</div>
+    <p>A 200-shuffle two-sample permutation test evaluates the top causal candidate. If the empirical p-value exceeds 0.05, the system sets <code>abstained: true</code>, which structurally forbids destructive actions via Cedar Invariant INV-03.</p>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">3. Dynamic STS IAM Credential Broker</div>
+    <p>Remediation actions never use permanent administrator keys. The broker generates temporary STS session tokens scoped with dynamic session policies allowing only the specific ARN, action, and 900-second window required for the step.</p>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-title">4. Tamper-Proof Cryptographic Ledger</div>
+    <p>Every decision, policy proof, and execution result is hashed into a SHA-256 hash chain stored in DynamoDB and mirrored to S3 with Object Lock in Compliance mode (WORM storage) for regulatory auditability.</p>
+  </div>
+
+  <div class="tech-stack">
+    <span class="pill">AWS ECS Fargate</span>
+    <span class="pill">AWS Cedar</span>
+    <span class="pill">AWS X-Ray</span>
+    <span class="pill">CloudWatch</span>
+    <span class="pill">DynamoDB</span>
+    <span class="pill">S3 Object Lock</span>
+    <span class="pill">AWS STS</span>
+    <span class="pill">Python 3.12</span>
+    <span class="pill">FastAPI</span>
+    <span class="pill">SciPy / NumPy</span>
+    <span class="pill">Pydantic v2</span>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- BOTTOM — Known Limitations -->
+  <div class="limitations">
+    <h2>Known Limitations</h2>
+    <ul>
+      <li>X-Ray traces must be enabled with 100% sampling during active incident windows to ensure accurate SCM graph reconstruction</li>
+      <li>Cedar policy evaluations require sub-millisecond local policy store caching for high-frequency gates</li>
+      <li>Permutation tests require a minimum baseline sample window of 30 historical observation points</li>
+      <li>Multi-region blast radius containment currently assumes single-region failover partitions</li>
+    </ul>
+  </div>
+
+</div>
+<script type="module" src="../figures.js"></script>
+</body>
+</html>

@@ -12,7 +12,7 @@
 static kernel_state_t g_kern;
 
 /* Forward declaration — defined in core/resume.c */
-extern const char *get_resume_html(void);
+extern const char *get_resume_text(void);
 
 /* Output capture buffer — printf is redirected here via
    the custom __stdout_write sink registered at init. */

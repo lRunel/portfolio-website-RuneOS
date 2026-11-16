@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Arecanut Disease Detector — An on-device offline deep learning system achieving 99.95% accuracy in detecting Arecanut diseases from mobile and drone images.">
+<meta name="description" content="Arecanut Disease Detector — offline, on-device classification of 9 arecanut palm diseases from phone and drone images (MobileNetV2, INT8 TFLite, React Native).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
@@ -117,6 +117,52 @@ pre.diagram {
 
 .section-divider { border: none; border-top: 1px solid #1a1a1a; margin: 48px 0; }
 
+.doc-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.doc-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #151515; border: 1px solid #282828; border-radius: 8px;
+  padding: 14px 18px; text-decoration: none; transition: all 0.2s;
+}
+.doc-item:hover { background: #1c1c1c; border-color: #3b3b3b; transform: translateY(-1px); }
+.doc-info { display: flex; align-items: center; gap: 12px; }
+.doc-icon { color: #f59e0b; font-size: 20px; }
+.doc-name { font-size: 14px; font-weight: 500; color: #e8e8e8; }
+.doc-meta { font-size: 12px; color: #666; font-family: 'JetBrains Mono', monospace; }
+.doc-link-btn { font-size: 12px; color: #888; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
+/* Sticky Nav Bar */
+.project-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 13, 13, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #222;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-nav-bar a {
+  color: #6bb5ff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.project-nav-bar a:hover {
+  color: #9dd0ff;
+  text-decoration: underline;
+}
+.project-nav-bar .nav-links {
+  display: flex;
+  gap: 16px;
+}
+
 /* --- RESPONSIVE / MOBILE --- */
 @media (max-width: 600px) {
   .pipeline-columns { grid-template-columns: 1fr; gap: 48px; }
@@ -124,24 +170,48 @@ pre.diagram {
   .video-placeholder { padding: 40px 16px; }
 }
 </style>
+<link rel="stylesheet" href="../project.css">
 </head>
-<body>
+<body style="--accent:#4eca8b">
+<nav class="project-nav-bar">
+  <a href="../../index.html">← Back to Rune-os</a>
+  <div class="nav-links">
+    <a href="https://github.com/AnanyaDevadiga2006/arecanut-mobile-and-uav-" target="_blank" rel="noopener">Team repo ↗</a>
+    <a href="../../assets/Shubham_Chowta_SWE_Backend.pdf" target="_blank">Resume PDF ↗</a>
+  </div>
+</nav>
 <div class="page">
 
   <!-- LAYER 1 — Above the fold -->
+  <div class="hero-figure"><div data-figure="phone"></div></div>
   <h1>Arecanut Disease Detector</h1>
-  <p class="claim">99.95% accuracy — validated on a test set with a completely different viewpoint distribution than training</p>
+  <p class="claim">Detects 9 arecanut palm diseases from a phone photo or a drone survey — on-device and offline. Built with a team of 4.</p>
 
-  <div class="metric-card">
-    <div class="metric-value">99.95%</div>
-    <div class="metric-label">accuracy</div>
+  <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+    <div class="metric-card">
+      <div class="metric-value">~97%</div>
+      <div class="metric-label">accuracy of the INT8 on-phone model</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">98.5%</div>
+      <div class="metric-label">validation accuracy (9 classes)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">3.0 MB</div>
+      <div class="metric-label">INT8 TFLite model size (70% cut)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">&lt;45 ms</div>
+      <div class="metric-label">on-device mobile inference</div>
+    </div>
   </div>
 
   <p>Arecanut is Karnataka's primary cash crop. Farmers lose significant yield to diseases that are invisible until advanced. This system detects them from a phone photo or a drone survey — on-device, offline, no server. The interesting engineering was not getting high accuracy — it was proving the accuracy was real.</p>
 
   <div class="badge-row">
-    <a href="#" class="badge" style="text-decoration:none; color:#e8e8e8; border-color:#555;">Read Paper ↗</a>
-    <a href="#" class="badge" style="text-decoration:none; color:#e8e8e8; border-color:#555;">View Patent ↗</a>
+    <a href="docs/arecanut miniproject documentation.pdf" class="badge" target="_blank" style="text-decoration:none; color:#e8e8e8; border-color:#555;">Technical Report ↗</a>
+    <a href="docs/fig_accuracy.pdf" class="badge" target="_blank" style="text-decoration:none; color:#e8e8e8; border-color:#555;">Accuracy Curves ↗</a>
+    <a href="docs/arecanut.md" class="badge" target="_blank" style="text-decoration:none; color:#e8e8e8; border-color:#555;">Architecture Doc ↗</a>
     <span class="badge">Computer Vision</span>
     <span class="badge">React Native</span>
     <span class="badge">TFLite</span>
@@ -150,16 +220,17 @@ pre.diagram {
   <hr class="section-divider">
 
   <!-- LAYER 2 — Second screenful -->
-  <h2>Why the accuracy number actually means something</h2>
+  <h2>Checking that the test set is really different</h2>
 
   <div class="callout">
-    <p>Most models trained on ground-level photos collapse when tested on drone footage — the viewpoint, scale, lighting, and angle are fundamentally different. This model was evaluated on a separate external dataset with a different distribution from training. Accuracy held at 99.95%.</p>
-    <p>To verify the distributions were actually different (not just relabeled copies), MobileNetV2 embeddings were extracted from both sets and compared using cosine similarity and t-SNE visualization. The feature spaces were genuinely different. That makes the result meaningful.</p>
+    <p>Most models trained on ground-level photos collapse when tested on drone footage — the viewpoint, scale, lighting, and angle are fundamentally different. So the model was also evaluated on a separate external dataset collected differently from the training data, rather than only on a held-out split.</p>
+    <p>To verify the distributions were actually different (not just relabeled copies), MobileNetV2 embeddings were extracted from both sets and compared using cosine similarity and t-SNE visualization. The feature spaces were genuinely different. That makes the external test a real check of generalization, not a repeat of the validation set.</p>
   </div>
 
-  <div class="video-placeholder">
-    <span class="material-symbols-rounded" style="font-size:48px;color:#444;display:block;margin-bottom:12px">play_circle</span>
-    <span class="label">Demo video coming soon</span>
+  <div style="background: #141414; border: 1px solid #282828; border-radius: 12px; padding: 18px; margin: 24px 0;">
+    <h3 style="font-size: 14px; font-weight: 600; color: #e8e8e8; margin-bottom: 8px;">Figure: Training Convergence &amp; Validation Accuracy Trajectory</h3>
+    <img src="fig_combined.png" alt="Arecanut Training Convergence and Validation Accuracy Curves" style="width: 100%; border-radius: 8px; border: 1px solid #222; display: block;">
+    <p style="font-size: 12.5px; color: #888; margin-top: 10px; margin-bottom: 0;">Cross-entropy loss and multi-class classification accuracy across training epochs for the 9-class MobileNetV2 architecture. Reaches 98.5% validation and 99.95% on external out-of-distribution field tests.</p>
   </div>
 
   <hr class="section-divider">
@@ -258,6 +329,81 @@ pre.diagram {
 
   <hr class="section-divider">
 
+  <!-- LAYER 4 — Documentation & Evaluation Artifacts -->
+  <h2>Project Documentation &amp; Evaluation Artifacts</h2>
+  <p>Technical reports, validation curves, and full architecture specifications:</p>
+
+  <div class="doc-list">
+    <a href="docs/arecanut miniproject documentation.pdf" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">picture_as_pdf</span>
+        <div>
+          <div class="doc-name">Arecanut Disease Detector Technical Report &amp; Documentation</div>
+          <div class="doc-meta">arecanut miniproject documentation.pdf · 4.1 MB · Complete Project Report</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Open PDF ↗</div>
+    </a>
+
+    <a href="docs/fig_accuracy.pdf" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">show_chart</span>
+        <div>
+          <div class="doc-name">Training &amp; Validation Accuracy Trajectory</div>
+          <div class="doc-meta">fig_accuracy.pdf · 21 KB · Vector Plot</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Open PDF ↗</div>
+    </a>
+
+    <a href="docs/fig_loss.pdf" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">trending_down</span>
+        <div>
+          <div class="doc-name">Loss Convergence Curve (Categorical Cross-Entropy)</div>
+          <div class="doc-meta">fig_loss.pdf · 21 KB · Vector Plot</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Open PDF ↗</div>
+    </a>
+
+    <a href="docs/fig_combined.pdf" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">analytics</span>
+        <div>
+          <div class="doc-name">Combined Accuracy, Loss &amp; Confusion Overview</div>
+          <div class="doc-meta">fig_combined.pdf · 21 KB · Dual Evaluation Plot</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Open PDF ↗</div>
+    </a>
+
+    <a href="docs/fig_lr_schedule.pdf" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">timeline</span>
+        <div>
+          <div class="doc-name">Learning Rate Decay Schedule</div>
+          <div class="doc-meta">fig_lr_schedule.pdf · 13 KB · Vector Plot</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">Open PDF ↗</div>
+    </a>
+
+    <a href="docs/arecanut.md" class="doc-item" target="_blank">
+      <div class="doc-info">
+        <span class="material-symbols-rounded doc-icon">description</span>
+        <div>
+          <div class="doc-name">Complete System Architecture &amp; Quantization Notes</div>
+          <div class="doc-meta">arecanut.md · 10 KB · Markdown Specification</div>
+        </div>
+      </div>
+      <div class="doc-link-btn">View Markdown ↗</div>
+    </a>
+
+  </div>
+
+  <hr class="section-divider">
+
   <!-- BOTTOM — Limitations -->
   <div class="limitations">
     <h2>Limitations</h2>
@@ -271,5 +417,6 @@ pre.diagram {
   </div>
 
 </div>
+<script type="module" src="../figures.js"></script>
 </body>
 </html>
